@@ -395,6 +395,7 @@ typedef struct
   __IO uint32_t RXCRCR;
   __IO uint32_t TXCRCR;
   __IO uint32_t I2SCFGR;
+  __IO uint32_t I2SPR;
 } SPI_TypeDef;
 
 /**
