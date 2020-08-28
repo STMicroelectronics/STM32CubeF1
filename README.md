@@ -1,4 +1,4 @@
-# STM32CubeF1 MCU Firmware Package 
+# STM32CubeF1 MCU Firmware Package
 
 **STM32Cube** is an STMicroelectronics original initiative to ease the developers life by reducing efforts, time and cost.
 

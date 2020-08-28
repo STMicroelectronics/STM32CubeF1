@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Release Notes for STM32CubeF1 Firmware Package</title>
-  <style type="text/css">
+  <style>
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
       span.underline{text-decoration: underline;}
@@ -65,24 +65,102 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.8.0 / 26-June-2019</strong></label>
+<input type="checkbox" id="collapse-section1_8_1" aria-hidden="true"> <label for="collapse-section1_8_1" aria-hidden="true"><strong>V1.8.1 / 30-July-2020</strong></label>
 <div>
 <h1 id="maintenance-release">Maintenance release</h1>
 <h2 id="main-changes">Main Changes</h2>
 <ul>
-<li>General updates to fix known defects and enhancements implementation</li>
-<li>Remove support of TrueSTUDIO tool chain</li>
-<li>General updates to fix CodeSonar compilation warnings</li>
-<li>General updates to fix the user manual .chm files</li>
-<li>Add support of HAL callback registration feature</li>
-<li><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong>
+<li><p>Patch release to fix known defects and enhancements implementation</p></li>
+<li><p><strong>HAL</strong></p>
+<ul>
+<li><strong>HAL</strong> driver
+<ul>
+<li>Enhance HAL_SetTickFreq() API robustness
+<ul>
+<li>Restore previous tick frequency when a wrong tick initialization occurs.</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL/LL I2C</strong> update
+<ul>
+<li>Update HAL_I2C_ER_IRQHandler() API to fix acknowledge failure issue with I2C memory IT processes
+<ul>
+<li>Add stop condition generation when NACK occurs.</li>
+</ul></li>
+<li>Update I2C_DMAXferCplt(), I2C_DMAError() and I2C_DMAAbort() APIs to fix hardfault issue when hdmatx and hdmarx parameters in i2c handle aren’t initialized (NULL pointer).
+<ul>
+<li>Add additional check on hi2c-&gt;hdmtx and hi2c-&gt;hdmarx before resetting DMA Tx/Rx complete callbacks</li>
+</ul></li>
+<li>Update HAL_I2C_ER_IRQHandler() API to fix acknowledge failure issue with I2C memory IT processes
+<ul>
+<li>Add stop condition generation when NACK occursHAL SMBUS</li>
+</ul></li>
+<li>Update HAL_I2C_Init() API to force software reset before setting new I2C configuration.</li>
+<li>Update HAL I2C processes to report ErrorCode when wrong I2C start condition occurs
+<ul>
+<li>Add new ErrorCode define: HAL_I2C_WRONG_START</li>
+<li>Set ErrorCode parameter in I2C handle to HAL_I2C_WRONG_START</li>
+</ul></li>
+<li>Update sequential APIs to avoid requesting a START when a STOP condition is not fully treated
+<ul>
+<li>Wait the end of STOP treatment by polling (with a timeout) the STOP bit on Control register CR1</li>
+</ul></li>
+<li>Update I2C_MasterReceiveRXNE() static API to avoid set the STOP bit again after the bit clearing by Hardware during the masking operation
+<ul>
+<li>Add new API I2C_WaitOnSTOPRequestThroughIT() to wait for stop bit.</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL/LL USB</strong> update
+<ul>
+<li>Bug fix: USB_ReadPMA() and USB_WritePMA() by ensuring 16-bits access to USB PMA memory</li>
+<li>Bug fix: correct USB RX count calculation</li>
+<li>Fix USB Bulk transfer double buffer mode</li>
+<li>Remove register keyword from USB defined macros as no more supported by C++ compiler</li>
+<li>Minor rework on USBD_Start() and USBD_Stop() APIs: stopping device will be handled by HAL_PCD_DeInit() API.</li>
+<li>Remove non used API for USB device mode.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="contents">Contents</h2>
+<table>
+<caption>Drivers</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: center;">Version</th>
+<th style="text-align: center;">Licence</th>
+<th style="text-align: center;">Release note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>STM32F1xx HAL</strong></td>
+<td style="text-align: center;"><strong>V1.1.5</strong></td>
+<td style="text-align: center;"><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></td>
+<td style="text-align: center;"><a href="Drivers/STM32F1xx_HAL_Driver/Release_Notes.html">release notes</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.8.0 / 26-June-2019</strong></label>
+<div>
+<h1 id="maintenance-release-1">Maintenance release</h1>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li><p>General updates to fix known defects and enhancements implementation</p></li>
+<li><p>Remove support of TrueSTUDIO tool chain</p></li>
+<li><p>General updates to fix CodeSonar compilation warnings</p></li>
+<li><p>General updates to fix the user manual .chm files</p></li>
+<li><p>Add support of HAL callback registration feature</p></li>
+<li><p><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong></p>
 <ul>
 <li>Add support of <strong>HAL callback registration</strong> feature
 <ul>
 <li>The feature disabled by default is available for the following HAL drivers:
 <ul>
 <li><strong>ADC, CAN, CEC, DAC, ETH, HCD, UART, USART, IRDA, SMARTCARD,</strong></li>
-<li><strong>MMC, NAND, NOR, PCCARD, PCD, RTC, SD, SRAM, I2C, SPI, I2S, TIM and WWDG</strong></li>
+<li><strong>MMC, NAND, NOR, PCCARD, PCD, RTC, SD, SRAM, SPI, I2S, TIM and WWDG</strong></li>
 </ul></li>
 <li>The feature may be enabled individually per HAL PPP driver by setting the corresponding definition USE_HAL_PPP_REGISTER_CALLBACKS to 1U in stm32f1xx_hal_conf.h project configuration file (template file stm32f1xx_hal_conf_template.h available from Drivers/STM32F1xx_HAL_Driver/Inc)</li>
 <li>Once enabled , the user application may resort to HAL_PPP_RegisterCallback() to register specific callback function(s) and unregister it(them) with HAL_PPP_UnRegisterCallback()</li>
@@ -94,19 +172,12 @@
 </ul></li>
 </ul></li>
 <li><p>Demonstrations binaries are no more delivered within the STM32CubeF1 MCU package. They are available for download, in addition to their required media files if any, in a standalone package accessible through each hardware board official webpage. Please refer to the corresponding demonstration binary readme.txt to get webpage for each board.</p></li>
-<li><strong>HAL</strong>
+<li><p><strong>HAL</strong></p>
 <ul>
 <li>Add support of HAL callback registration feature</li>
 <li>Add new <strong>HAL EXTI</strong> driver</li>
 <li><strong>Here below the new features introduced on HAL drivers</strong>
 <ul>
-<li>Add support of I2C repeated start feature in DMA Mode With the following new API’s
-<ul>
-<li>HAL_I2C_Master_Seq_Transmit_DMA()</li>
-<li>HAL_I2C_Master_Seq_Receive_DMA()</li>
-<li>HAL_I2C_Slave_Seq_Transmit_DMA()</li>
-<li>HAL_I2C_Slave_Seq_Receive_DMA()</li>
-</ul></li>
 <li>Add SPI Abort transfer API’s:
 <ul>
 <li>HAL_SPI_Abort()</li>
@@ -122,14 +193,14 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li><strong>CMSIS</strong>
+<li><p><strong>CMSIS</strong></p>
 <ul>
 <li>Fix known defects and several implementation enhancement</li>
 <li>Fix wrong initialization value for “SystemCoreClock” in System_stm32f1xx.c file</li>
 <li>Update gcc linker file template to be aligned with AC6 linker file template</li>
 <li>Align ErrorStatus typedef to common error handling</li>
 </ul></li>
-<li><strong>Middleware</strong>
+<li><p><strong>Middleware</strong></p>
 <ul>
 <li>Update to use FreeRTOS <strong>10.0.1</strong> ST modified <strong>20190329</strong></li>
 <li>Update to use STemWin <strong>V5.44</strong> ST modified <strong>20180322</strong></li>
@@ -137,9 +208,8 @@
 <li>Update to use USB Host Library <strong>V3.3.3</strong></li>
 <li>Update to use new version of LwIP <strong>V2.0.3</strong></li>
 </ul></li>
-<li><strong>Projects</strong>
+<li><p><strong>Projects</strong></p>
 <ul>
-<li>Update HAL I2C examples to be compliant with new I2C API</li>
 <li>Update STemWin applications to be compliant with new STemWin architecture</li>
 <li>Update USB HOST projects to be compliant with USB Host Stack <strong>V3.3.3:</strong>
 <ul>
@@ -168,7 +238,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents">Contents</h2>
+<h2 id="contents-1">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -417,6 +487,7 @@
 <h2 id="known-limitations">Known Limitations</h2>
 <ul>
 <li>SW4STM32 projects aren’t provided for STM32VL-Discovery board because it embeds STLinv1 version that is not hardware supported by SW4STM32 toolchain.</li>
+<li>Register callback feature will be deployed on HAL I2C driver in next release</li>
 </ul>
 <h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
 <ul>
@@ -445,8 +516,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.7.0 / 09-October-2018</strong></label>
 <div>
-<h1 id="maintenance-release-1">Maintenance release</h1>
-<h2 id="main-changes-1">Main Changes</h2>
+<h1 id="maintenance-release-2">Maintenance release</h1>
+<h2 id="main-changes-2">Main Changes</h2>
 <ul>
 <li>General update to fix known defects and several implementations enhancement</li>
 <li><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong>
@@ -474,7 +545,7 @@
 </ul></li>
 <li>For the complete list of changes, please refer to the release notes of each firmware component</li>
 </ul>
-<h2 id="contents-1">Contents</h2>
+<h2 id="contents-2">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -752,12 +823,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section68" aria-hidden="true"> <label for="collapse-section68" aria-hidden="true"><strong>V1.6.1 / 09-March-2018</strong></label>
 <div>
-<h1 id="maintenance-release-2">Maintenance release</h1>
-<h2 id="main-changes-2">Main Changes</h2>
+<h1 id="maintenance-release-3">Maintenance release</h1>
+<h2 id="main-changes-3">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issues in GPIO, RCC, SMARTCARD, I2C and Generic HAL/LL drivers</strong></li>
 </ul>
-<h2 id="contents-2">Contents</h2>
+<h2 id="contents-3">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -779,23 +850,23 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V1.6.0 / 12-May-2017</strong></label>
 <div>
-<h1 id="maintenance-release-3">Maintenance release</h1>
-<h2 id="main-changes-3">Main Changes</h2>
+<h1 id="maintenance-release-4">Maintenance release</h1>
+<h2 id="main-changes-4">Main Changes</h2>
 <ul>
 <li><p>General update to fix known defects and several implementations enhancement</p></li>
-<li><strong>HAL</strong>
+<li><p><strong>HAL</strong></p>
 <ul>
 <li>stm32f1xx_hal_conf_template.h fix typo: update to refer to stm32f1xx_hal_mmc.h instead of stm32f4xx_hal_mmc.h</li>
 <li>stm32f1xx_hal_mmc.c add missing () to fix compilation warning detected with SW4STM32 when extra feature is enabled.</li>
 <li>stm32f1xx_ll_system.h: fix typo in LL_DBGMCU_APB1_GRP1_I2C1_STOP and LL_DBGMCU_APB1_GRP1_I2C2_STOP literals definition</li>
 </ul></li>
-<li><strong>Projects</strong>
+<li><p><strong>Projects</strong></p>
 <ul>
 <li>General updates to be compliant with Linux platforms</li>
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-3">Contents</h2>
+<h2 id="contents-4">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1073,10 +1144,10 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V1.5.0 / 14-April-2017</strong></label>
 <div>
-<h1 id="maintenance-release-4">Maintenance release</h1>
-<h2 id="main-changes-4">Main Changes</h2>
+<h1 id="maintenance-release-5">Maintenance release</h1>
+<h2 id="main-changes-5">Main Changes</h2>
 <ul>
-<li>Add Low Layer drivers under Drivers32F1xx_HAL_Driver
+<li><p>Add Low Layer drivers under Drivers32F1xx_HAL_Driver</p>
 <ul>
 <li>Low Layer drivers allow performance and memory footprint optimization</li>
 <li>Low Layer drivers APIs provide register level programming: they require deep knowledge of peripherals described in STM32F1xx Reference Manuals</li>
@@ -1085,7 +1156,7 @@
 <li>Refer to [UM1847] (http://www.st.com/st-web-ui/static/active/en/resource/technical/document/user_manual/DM00151047.pdf) for Low Layer presentation and [UM1850] (http://www.st.com/st-web-ui/static/active/en/resource/technical/document/user_manual/DM00154093.pdf) for API list</li>
 </ul></li>
 <li><p>General update to fix known defects and several implementations enhancement</p></li>
-<li><strong>HAL</strong>
+<li><p><strong>HAL</strong></p>
 <ul>
 <li>Add Low Layer drivers under Drivers32F1xx_HAL_Driver</li>
 <li>Add new <strong>MMC</strong> HAL driver</li>
@@ -1136,12 +1207,12 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li><strong>CMSIS</strong>
+<li><p><strong>CMSIS</strong></p>
 <ul>
 <li>Fix known defects and several implementation enhancement</li>
 <li>General update to support Low layer drivers (LL)</li>
 </ul></li>
-<li><strong>Middleware</strong>
+<li><p><strong>Middleware</strong></p>
 <ul>
 <li>Update STemWin Library V5.32 with a new build with EWARM V7.80</li>
 <li>Upgrade to use new version of LwIP V2.0.0
@@ -1151,7 +1222,7 @@
 <li>Update to new version of FreeRTOS V9.0.0</li>
 <li>Update FatFS to implement changes on sd_diskio.c file to be aligned with HAL SD driver and BSP drivers API changes.</li>
 </ul></li>
-<li><strong>Projects</strong>
+<li><p><strong>Projects</strong></p>
 <ul>
 <li>General updates to fix known defects and enhancements implementation</li>
 <li>Add Low Layer examples and MIX examples on the STM32F103RB-Nucleo, STM32F10E-EVAL boards</li>
@@ -1161,7 +1232,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-4">Contents</h2>
+<h2 id="contents-5">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1439,11 +1510,11 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.4.0 / 29-April-2016</strong></label>
 <div>
-<h1 id="maintenance-release-5">Maintenance release</h1>
-<h2 id="main-changes-5">Main Changes</h2>
+<h1 id="maintenance-release-6">Maintenance release</h1>
+<h2 id="main-changes-6">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
-<li><strong>HAL</strong>
+<li><p><strong>HAL</strong></p>
 <ul>
 <li><strong>HAL RCC</strong>
 <ul>
@@ -1475,13 +1546,13 @@
 <li>Adapt FSMC_NAND_Init behavior to the others STM32 series by reseting the bit FSMC_PCRx_PBKEN.</li>
 </ul></li>
 </ul></li>
-<li><strong>CMSIS</strong>
+<li><p><strong>CMSIS</strong></p>
 <ul>
 <li>Add _Pos and _Msk defines to be used with _VAL2FLD(field, value) and _FLD2VAL(field, value).</li>
 <li>The previous naming are kept for backward compatibility.</li>
 <li>Add APBPrescTable constant to list APB prescalers values.</li>
 </ul></li>
-<li><strong>BSP</strong>
+<li><p><strong>BSP</strong></p>
 <ul>
 <li>STM32F1xx_Nucleo
 <ul>
@@ -1496,17 +1567,17 @@
 <li>Set the NVIC priority to the lowest possible to not interfere with user settings.</li>
 </ul></li>
 </ul></li>
-<li><strong>Middlewares</strong>
+<li><p><strong>Middlewares</strong></p>
 <ul>
 <li>Update to FreeRTOS V8.2.3.</li>
 <li>Update to STM32 USB Device Library V2.4.2</li>
 </ul></li>
-<li><strong>Others</strong>
+<li><p><strong>Others</strong></p>
 <ul>
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-5">Contents</h2>
+<h2 id="contents-6">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1783,15 +1854,15 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.3.1 / 11-January-2016</strong></label>
 <div>
-<h1 id="maintenance-release-6">Maintenance release</h1>
-<h2 id="main-changes-6">Main Changes</h2>
+<h1 id="maintenance-release-7">Maintenance release</h1>
+<h2 id="main-changes-7">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issue in HAL driver:</strong>
 <ul>
 <li>Remove the #if defined(USE_HAL_LEGACY) condition to include Legacy/stm32_hal_legacy.h by default, in stm32f1xx_hal_def.h.</li>
 </ul></li>
 </ul>
-<h2 id="contents-6">Contents</h2>
+<h2 id="contents-7">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -1842,11 +1913,11 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.3.0 / 18-December-2015</strong></label>
 <div>
-<h1 id="maintenance-release-7">Maintenance release</h1>
-<h2 id="main-changes-7">Main Changes</h2>
+<h1 id="maintenance-release-8">Maintenance release</h1>
+<h2 id="main-changes-8">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
-<li><strong>HAL</strong>
+<li><p><strong>HAL</strong></p>
 <ul>
 <li>Insure that do {} while(0) are used in in multi statement macros. (hal eth and pcd)</li>
 <li>Manage simultaneous errors in IRQHandler. (hal uart, smartcard, usart and uart)</li>
@@ -1858,25 +1929,25 @@
 <li>Reduce the default timeout value for the startup of the HSE form 5s to 100ms.</li>
 <li>Update HAL weak empty callbacks to prevent unused argument compilation warnings with some compilers.</li>
 </ul></li>
-<li><strong>CMSIS</strong>
+<li><p><strong>CMSIS</strong></p>
 <ul>
 <li>Align bit name across all STM32 families (EXTI, WWDG) and keeping backward compatibility with aliases.</li>
 </ul></li>
-<li><strong>Middlewares</strong>
+<li><p><strong>Middlewares</strong></p>
 <ul>
 <li>Update to CMSIS V4.5.</li>
 </ul></li>
-<li><strong>Projects</strong>
+<li><p><strong>Projects</strong></p>
 <ul>
 <li>Update all Keil project from Keil V4 to Keil V5.</li>
 <li>Update all SW4STM32 projects to version 1.5.0.</li>
 </ul></li>
-<li><strong>Others</strong>
+<li><p><strong>Others</strong></p>
 <ul>
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-7">Contents</h2>
+<h2 id="contents-8">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2154,12 +2225,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0" aria-hidden="true"> <label for="collapse-section0" aria-hidden="true"><strong>V1.2.0 / 31-July-2015</strong></label>
 <div>
-<h1 id="maintenance-release-8">Maintenance release</h1>
-<h2 id="main-changes-8">Main Changes</h2>
+<h1 id="maintenance-release-9">Maintenance release</h1>
+<h2 id="main-changes-9">Main Changes</h2>
 <ul>
-<li><strong>Maintenance release.</strong></li>
+<li><p><strong>Maintenance release.</strong></p></li>
 <li><p><strong>Fix known defects and several enhancements implementation.</strong></p></li>
-<li><strong>Projects</strong>
+<li><p><strong>Projects</strong></p>
 <ul>
 <li>Adding new projects to introduce the FreeRTOS V8.2.1
 <ul>
@@ -2169,7 +2240,7 @@
 </ul></li>
 <li>Adding new application IAP for STM3210E_EVAL board.</li>
 </ul></li>
-<li><strong>FatFs</strong>
+<li><p><strong>FatFs</strong></p>
 <ul>
 <li>Upgrade to use FatFs R0.11.</li>
 <li>Add new APIs FATFS_LinkDriverEx() and FATFS_UnLinkDriverEx() to manage USB Key Disk having multi-lun capability. These APIs are equivalent to FATFS_LinkDriver() and FATFS_UnLinkDriver() with “lun” parameter set to 0.</li>
@@ -2179,7 +2250,7 @@
 <li>For application code based on previous FatFs version; when moving to R0.11 the changes that need to be done is to update ffconf.h file, taking ffconf_template.h file as reference.</li>
 </ul></li>
 </ul></li>
-<li><strong>CMSIS</strong>
+<li><p><strong>CMSIS</strong></p>
 <ul>
 <li>CMSIS-Core V4.10
 <ul>
@@ -2201,7 +2272,7 @@
 <li>CMSIS-RTOS V1.02 (unchanged)</li>
 </ul></li>
 </ul>
-<h2 id="contents-8">Contents</h2>
+<h2 id="contents-9">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2475,20 +2546,20 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section000" aria-hidden="true"> <label for="collapse-section000" aria-hidden="true"><strong>V1.1.0 / 05-June-2015</strong></label>
 <div>
-<h1 id="maintenance-release-9">Maintenance release</h1>
-<h2 id="main-changes-9">Main Changes</h2>
+<h1 id="maintenance-release-10">Maintenance release</h1>
+<h2 id="main-changes-10">Main Changes</h2>
 <ul>
 <li><p><strong>Add support of System Workbench for STM32 (SW4STM32) toolchain</strong></p></li>
-<li><strong>HAL</strong></li>
+<li><p><strong>HAL</strong></p></li>
 <li><p>No changes</p></li>
-<li><strong>Middlewares</strong></li>
+<li><p><strong>Middlewares</strong></p></li>
 <li><p>No changes</p></li>
-<li><strong>BSP</strong></li>
+<li><p><strong>BSP</strong></p></li>
 <li><p>No changes</p></li>
-<li><strong>Projects</strong></li>
+<li><p><strong>Projects</strong></p></li>
 <li><p>Add projects for SW4STM32 toolchain</p></li>
 </ul>
-<h2 id="contents-9">Contents</h2>
+<h2 id="contents-10">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -2728,12 +2799,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0000" aria-hidden="true"> <label for="collapse-section0000" aria-hidden="true"><strong>V1.0.0 / 17-December-2014</strong></label>
 <div>
-<h1 id="maintenance-release-10">Maintenance release</h1>
-<h2 id="main-changes-10">Main Changes</h2>
+<h1 id="maintenance-release-11">Maintenance release</h1>
+<h2 id="main-changes-11">Main Changes</h2>
 <ul>
 <li><strong>First official release of STM32CubeF1 (STM32Cube for STM32F1 Series)</strong></li>
 </ul>
-<h2 id="contents-10">Contents</h2>
+<h2 id="contents-11">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
