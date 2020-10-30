@@ -65,10 +65,54 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1_8_2" aria-hidden="true"> <label for="collapse-section1_8_2" aria-hidden="true"><strong>V1.8.2 / 07-September-2020</strong></label>
+<input type="checkbox" id="collapse-section1_8_3" aria-hidden="true"> <label for="collapse-section1_8_3" aria-hidden="true"><strong>V1.8.3 / 20-October-2020</strong></label>
 <div>
 <h1 id="maintenance-release">Maintenance release</h1>
 <h2 id="main-changes">Main Changes</h2>
+<ul>
+<li><p>Patch release of STM32CubeF1 Firmware Package.</p></li>
+<li><p><strong>HAL</strong></p>
+<ul>
+<li><strong>HAL/LL I2C</strong> driver
+<ul>
+<li>Update to fix hardfault issue with HAL_I2C_Mem_Write_DMA() API:
+<ul>
+<li>Abort the right ongoing DMA transfer when memory write access request operation failed: fix typo “hdmarx” replaced by “hdmatx”</li>
+</ul></li>
+</ul></li>
+<li><strong>HAL/LL GPIO</strong> driver
+<ul>
+<li>Update LL_GPIO_Init() API to configure correctly the GPIO speed parameter when GPIO alternate function mode is selected.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="contents">Contents</h2>
+<table>
+<caption>Drivers</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: center;">Version</th>
+<th style="text-align: center;">Licence</th>
+<th style="text-align: center;">Release note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>STM32F1xx HAL</strong></td>
+<td style="text-align: center;"><strong>V1.1.7</strong></td>
+<td style="text-align: center;"><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></td>
+<td style="text-align: center;"><a href="Drivers/STM32F1xx_HAL_Driver/Release_Notes.html">release notes</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1_8_2" aria-hidden="true"> <label for="collapse-section1_8_2" aria-hidden="true"><strong>V1.8.2 / 07-September-2020</strong></label>
+<div>
+<h1 id="maintenance-release-1">Maintenance release</h1>
+<h2 id="main-changes-1">Main Changes</h2>
 <ul>
 <li><p>Patch release to fix known defects and enhancements implementation</p></li>
 <li><p><strong>HAL</strong></p>
@@ -256,7 +300,7 @@
 <li>SystemInit(): update to don’t reset RCC registers to its reset values.</li>
 </ul></li>
 </ul>
-<h2 id="contents">Contents</h2>
+<h2 id="contents-1">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -350,8 +394,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1_8_1" aria-hidden="true"> <label for="collapse-section1_8_1" aria-hidden="true"><strong>V1.8.1 / 30-July-2020</strong></label>
 <div>
-<h1 id="maintenance-release-1">Maintenance release</h1>
-<h2 id="main-changes-1">Main Changes</h2>
+<h1 id="maintenance-release-2">Maintenance release</h1>
+<h2 id="main-changes-2">Main Changes</h2>
 <ul>
 <li><p>Patch release to fix known defects and enhancements implementation</p></li>
 <li><p><strong>HAL</strong></p>
@@ -403,7 +447,7 @@
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents-1">Contents</h2>
+<h2 id="contents-2">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -428,8 +472,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.8.0 / 26-June-2019</strong></label>
 <div>
-<h1 id="maintenance-release-2">Maintenance release</h1>
-<h2 id="main-changes-2">Main Changes</h2>
+<h1 id="maintenance-release-3">Maintenance release</h1>
+<h2 id="main-changes-3">Main Changes</h2>
 <ul>
 <li><p>General updates to fix known defects and enhancements implementation</p></li>
 <li><p>Remove support of TrueSTUDIO tool chain</p></li>
@@ -521,7 +565,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-2">Contents</h2>
+<h2 id="contents-3">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -799,8 +843,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.7.0 / 09-October-2018</strong></label>
 <div>
-<h1 id="maintenance-release-3">Maintenance release</h1>
-<h2 id="main-changes-3">Main Changes</h2>
+<h1 id="maintenance-release-4">Maintenance release</h1>
+<h2 id="main-changes-4">Main Changes</h2>
 <ul>
 <li>General update to fix known defects and several implementations enhancement</li>
 <li><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong>
@@ -828,7 +872,7 @@
 </ul></li>
 <li>For the complete list of changes, please refer to the release notes of each firmware component</li>
 </ul>
-<h2 id="contents-3">Contents</h2>
+<h2 id="contents-4">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1106,12 +1150,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section68" aria-hidden="true"> <label for="collapse-section68" aria-hidden="true"><strong>V1.6.1 / 09-March-2018</strong></label>
 <div>
-<h1 id="maintenance-release-4">Maintenance release</h1>
-<h2 id="main-changes-4">Main Changes</h2>
+<h1 id="maintenance-release-5">Maintenance release</h1>
+<h2 id="main-changes-5">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issues in GPIO, RCC, SMARTCARD, I2C and Generic HAL/LL drivers</strong></li>
 </ul>
-<h2 id="contents-4">Contents</h2>
+<h2 id="contents-5">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -1133,8 +1177,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V1.6.0 / 12-May-2017</strong></label>
 <div>
-<h1 id="maintenance-release-5">Maintenance release</h1>
-<h2 id="main-changes-5">Main Changes</h2>
+<h1 id="maintenance-release-6">Maintenance release</h1>
+<h2 id="main-changes-6">Main Changes</h2>
 <ul>
 <li><p>General update to fix known defects and several implementations enhancement</p></li>
 <li><p><strong>HAL</strong></p>
@@ -1149,7 +1193,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-5">Contents</h2>
+<h2 id="contents-6">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1427,8 +1471,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V1.5.0 / 14-April-2017</strong></label>
 <div>
-<h1 id="maintenance-release-6">Maintenance release</h1>
-<h2 id="main-changes-6">Main Changes</h2>
+<h1 id="maintenance-release-7">Maintenance release</h1>
+<h2 id="main-changes-7">Main Changes</h2>
 <ul>
 <li><p>Add Low Layer drivers under Drivers32F1xx_HAL_Driver</p>
 <ul>
@@ -1515,7 +1559,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-6">Contents</h2>
+<h2 id="contents-7">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1793,8 +1837,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.4.0 / 29-April-2016</strong></label>
 <div>
-<h1 id="maintenance-release-7">Maintenance release</h1>
-<h2 id="main-changes-7">Main Changes</h2>
+<h1 id="maintenance-release-8">Maintenance release</h1>
+<h2 id="main-changes-8">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
 <li><p><strong>HAL</strong></p>
@@ -1860,7 +1904,7 @@
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-7">Contents</h2>
+<h2 id="contents-8">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2137,15 +2181,15 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.3.1 / 11-January-2016</strong></label>
 <div>
-<h1 id="maintenance-release-8">Maintenance release</h1>
-<h2 id="main-changes-8">Main Changes</h2>
+<h1 id="maintenance-release-9">Maintenance release</h1>
+<h2 id="main-changes-9">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issue in HAL driver:</strong>
 <ul>
 <li>Remove the #if defined(USE_HAL_LEGACY) condition to include Legacy/stm32_hal_legacy.h by default, in stm32f1xx_hal_def.h.</li>
 </ul></li>
 </ul>
-<h2 id="contents-8">Contents</h2>
+<h2 id="contents-9">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -2196,8 +2240,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.3.0 / 18-December-2015</strong></label>
 <div>
-<h1 id="maintenance-release-9">Maintenance release</h1>
-<h2 id="main-changes-9">Main Changes</h2>
+<h1 id="maintenance-release-10">Maintenance release</h1>
+<h2 id="main-changes-10">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
 <li><p><strong>HAL</strong></p>
@@ -2230,7 +2274,7 @@
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-9">Contents</h2>
+<h2 id="contents-10">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2508,8 +2552,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0" aria-hidden="true"> <label for="collapse-section0" aria-hidden="true"><strong>V1.2.0 / 31-July-2015</strong></label>
 <div>
-<h1 id="maintenance-release-10">Maintenance release</h1>
-<h2 id="main-changes-10">Main Changes</h2>
+<h1 id="maintenance-release-11">Maintenance release</h1>
+<h2 id="main-changes-11">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release.</strong></p></li>
 <li><p><strong>Fix known defects and several enhancements implementation.</strong></p></li>
@@ -2555,7 +2599,7 @@
 <li>CMSIS-RTOS V1.02 (unchanged)</li>
 </ul></li>
 </ul>
-<h2 id="contents-10">Contents</h2>
+<h2 id="contents-11">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2829,8 +2873,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section000" aria-hidden="true"> <label for="collapse-section000" aria-hidden="true"><strong>V1.1.0 / 05-June-2015</strong></label>
 <div>
-<h1 id="maintenance-release-11">Maintenance release</h1>
-<h2 id="main-changes-11">Main Changes</h2>
+<h1 id="maintenance-release-12">Maintenance release</h1>
+<h2 id="main-changes-12">Main Changes</h2>
 <ul>
 <li><p><strong>Add support of System Workbench for STM32 (SW4STM32) toolchain</strong></p></li>
 <li><p><strong>HAL</strong></p></li>
@@ -2842,7 +2886,7 @@
 <li><p><strong>Projects</strong></p></li>
 <li><p>Add projects for SW4STM32 toolchain</p></li>
 </ul>
-<h2 id="contents-11">Contents</h2>
+<h2 id="contents-12">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -3082,12 +3126,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0000" aria-hidden="true"> <label for="collapse-section0000" aria-hidden="true"><strong>V1.0.0 / 17-December-2014</strong></label>
 <div>
-<h1 id="maintenance-release-12">Maintenance release</h1>
-<h2 id="main-changes-12">Main Changes</h2>
+<h1 id="maintenance-release-13">Maintenance release</h1>
+<h2 id="main-changes-13">Main Changes</h2>
 <ul>
 <li><strong>First official release of STM32CubeF1 (STM32Cube for STM32F1 Series)</strong></li>
 </ul>
-<h2 id="contents-12">Contents</h2>
+<h2 id="contents-13">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
