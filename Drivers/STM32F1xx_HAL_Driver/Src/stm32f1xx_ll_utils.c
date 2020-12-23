@@ -126,6 +126,28 @@
 
 #define IS_LL_UTILS_PLL_FREQUENCY(__VALUE__) ((__VALUE__) <= UTILS_PLL_OUTPUT_MAX)
 
+#if defined(RCC_PLL2_SUPPORT)
+#define IS_LL_UTILS_PLL2MUL_VALUE(__VALUE__) (((__VALUE__) == LL_RCC_PLL2_MUL_8) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_9) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_10) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_11) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_12) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_13) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_14) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_16) \
+                                           || ((__VALUE__) == LL_RCC_PLL2_MUL_20))
+
+#define IS_LL_UTILS_PREDIV2_VALUE(__VALUE__) (((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_1)  || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_2)   || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_3)  || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_4)   || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_5)  || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_6)   || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_7)  || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_8)   || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_9)  || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_10)  || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_11) || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_12)  || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_13) || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_14)  || \
+                                              ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_15) || ((__VALUE__) == LL_RCC_HSE_PREDIV2_DIV_16))
+
+#define IS_LL_UTILS_PLL2_FREQUENCY(__VALUE__) ((__VALUE__) <= UTILS_PLL_OUTPUT_MAX)
+#endif /* RCC_PLL2_SUPPORT */
 
 #define IS_LL_UTILS_HSE_BYPASS(__STATE__) (((__STATE__) == LL_UTILS_HSEBYPASS_ON) \
                                         || ((__STATE__) == LL_UTILS_HSEBYPASS_OFF))
@@ -140,6 +162,10 @@
   */
 static uint32_t    UTILS_GetPLLOutputFrequency(uint32_t PLL_InputFrequency,
                                                LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct);
+#if defined(RCC_PLL2_SUPPORT)
+static uint32_t    UTILS_GetPLL2OutputFrequency(uint32_t PLL2_InputFrequency,
+                                               LL_UTILS_PLLInitTypeDef *UTILS_PLL2InitStruct);
+#endif /* RCC_PLL2_SUPPORT */
 static ErrorStatus UTILS_EnablePLLAndSwitchSystem(uint32_t SYSCLK_Frequency, LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
 static ErrorStatus UTILS_PLL_IsBusy(void);
 /**
@@ -450,6 +476,90 @@ ErrorStatus LL_PLL_ConfigSystemClock_HSE(uint32_t HSEFrequency, uint32_t HSEBypa
   return status;
 }
 
+#if defined(RCC_PLL2_SUPPORT)
+/**
+  * @brief  This function configures system clock with HSE as clock source of the PLL, via PLL2
+  * @note   The application need to ensure that PLL and PLL2 are disabled.
+  * @note   Function is based on the following formula:
+  *         - PLL output frequency = ((((HSI frequency / PREDIV2) * PLL2MUL) / PREDIV) * PLLMUL)
+  *         - PREDIV, PLLMUL, PREDIV2, PLL2MUL: The application software must set correctly the
+  *                   PLL multiplication factor to not exceed @ref UTILS_PLL_OUTPUT_MAX
+  * @note   FLASH latency can be modified through this function.
+  * @param  HSEFrequency Value between Min_Data = RCC_HSE_MIN and Max_Data = RCC_HSE_MAX
+  * @param  HSEBypass This parameter can be one of the following values:
+  *         @arg @ref LL_UTILS_HSEBYPASS_ON
+  *         @arg @ref LL_UTILS_HSEBYPASS_OFF
+  * @param  UTILS_PLLInitStruct  pointer to a @ref LL_UTILS_PLLInitTypeDef structure that contains
+  *                              the configuration information for the PLL.
+  * @param  UTILS_PLL2InitStruct pointer to a @ref LL_UTILS_PLLInitTypeDef structure that contains
+  *                              the configuration information for the PLL2.
+  * @param  UTILS_ClkInitStruct  pointer to a @ref LL_UTILS_ClkInitTypeDef structure that contains
+  *                              the configuration information for the BUS prescalers.
+  * @retval An ErrorStatus enumeration value:
+  *          - SUCCESS: Max frequency configuration done
+  *          - ERROR: Max frequency configuration not done
+  */
+ErrorStatus LL_PLL_ConfigSystemClock_PLL2(uint32_t HSEFrequency, uint32_t HSEBypass,
+                                          LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
+                                          LL_UTILS_PLLInitTypeDef *UTILS_PLL2InitStruct,
+                                          LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct)
+{
+	ErrorStatus status = SUCCESS;
+	uint32_t pllfreq = 0U;
+	uint32_t pll2freq = 0U;
+
+	/* Check the parameters */
+	assert_param(IS_LL_UTILS_HSE_FREQUENCY(HSEFrequency));
+	assert_param(IS_LL_UTILS_HSE_BYPASS(HSEBypass));
+
+	/* Check if one of the PLL is enabled */
+	if (UTILS_PLL_IsBusy() == SUCCESS)
+	{
+		assert_param(IS_LL_UTILS_PREDIV_VALUE(UTILS_PLLInitStruct->Prediv));
+		assert_param(IS_LL_UTILS_PREDIV2_VALUE(UTILS_PLL2InitStruct->Prediv));
+
+		/* Calculate the new PLL output frequency */
+		pll2freq = UTILS_GetPLL2OutputFrequency(HSEFrequency, UTILS_PLL2InitStruct);
+		pllfreq = UTILS_GetPLLOutputFrequency(pll2freq, UTILS_PLLInitStruct);
+
+		/* Enable HSE if not enabled */
+		if (LL_RCC_HSE_IsReady() != 1U)
+		{
+			/* Check if need to enable HSE bypass feature or not */
+			if (HSEBypass == LL_UTILS_HSEBYPASS_ON)
+			{
+				LL_RCC_HSE_EnableBypass();
+			}
+			else
+			{
+				LL_RCC_HSE_DisableBypass();
+			}
+
+			/* Enable HSE */
+			LL_RCC_HSE_Enable();
+			while (LL_RCC_HSE_IsReady() != 1U)
+			{
+				/* Wait for HSE ready */
+			}
+		}
+
+		/* configure PLLs */
+		LL_RCC_PLL_ConfigDomain_PLL2(UTILS_PLL2InitStruct->Prediv, UTILS_PLL2InitStruct->PLLMul);
+		LL_RCC_PLL_ConfigDomain_SYS(((RCC_CFGR2_PREDIV1SRC << 4U) | RCC_CFGR_PLLSRC | UTILS_PLLInitStruct->Prediv), UTILS_PLLInitStruct->PLLMul);
+
+		/* Enable PLL and switch system clock to PLL */
+		status = UTILS_EnablePLLAndSwitchSystem(pllfreq, UTILS_ClkInitStruct);
+	}
+	else
+	{
+		/* Current PLL configuration cannot be modified */
+		status = ERROR;
+	}
+
+	return status;
+}
+#endif /* RCC_PLL2_SUPPORT */
+
 /**
   * @}
   */
@@ -485,6 +595,29 @@ static uint32_t UTILS_GetPLLOutputFrequency(uint32_t PLL_InputFrequency, LL_UTIL
 
   return pllfreq;
 }
+
+#if defined(RCC_PLL2_SUPPORT)
+/**
+  * @brief  Function to check that PLL2 can be modified
+  * @param  PLL2_InputFrequency  PLL2 input frequency (in Hz)
+  * @param  UTILS_PLL2InitStruct pointer to a @ref LL_UTILS_PLLInitTypeDef structure that contains
+  *                              the configuration information for the PLL.
+  * @retval PLL2 output frequency (in Hz)
+  */
+static uint32_t UTILS_GetPLL2OutputFrequency(uint32_t PLL2_InputFrequency, LL_UTILS_PLLInitTypeDef *UTILS_PLL2InitStruct)
+{
+	uint32_t pll2freq = 0U;
+
+	/* Check the parameters */
+	assert_param(IS_LL_UTILS_PLL2MUL_VALUE(UTILS_PLL2InitStruct->PLLMul));
+
+	/* Check different PLL parameters according to RM                          */
+	pll2freq = __LL_RCC_CALC_PLL2CLK_FREQ(PLL2_InputFrequency, UTILS_PLL2InitStruct->PLLMul, UTILS_PLL2InitStruct->Prediv);
+	assert_param(IS_LL_UTILS_PLL2_FREQUENCY(pll2freq));
+
+	return pll2freq;
+}
+#endif /* RCC_PLL2_SUPPORT */
 
 /**
   * @brief  Function to check that PLL can be modified
