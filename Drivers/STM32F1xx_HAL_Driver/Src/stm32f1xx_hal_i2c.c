@@ -6059,7 +6059,7 @@ static void I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c, uint32_t IT2Flags)
   else
   {
     /* Clear ADDR flag */
-    __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_ADDR);
+    __HAL_I2C_CLEAR_ADDRFLAG(hi2c);
 
     /* Process Unlocked */
     __HAL_UNLOCK(hi2c);
