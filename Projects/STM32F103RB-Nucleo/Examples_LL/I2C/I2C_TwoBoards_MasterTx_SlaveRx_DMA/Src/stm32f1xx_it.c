@@ -172,7 +172,7 @@ void DMA1_Channel7_IRQHandler(void)
 {
   if(LL_DMA_IsActiveFlag_TC7(DMA1))
   {
-    LL_DMA_ClearFlag_GI7(DMA1);
+    LL_DMA_ClearFlag_TC7(DMA1);
     DMA1_Transfer_Complete_Callback();
   }
   else if(LL_DMA_IsActiveFlag_TE7(DMA1))
@@ -192,7 +192,7 @@ void DMA1_Channel6_IRQHandler(void)
 {
   if(LL_DMA_IsActiveFlag_TC6(DMA1))
   {
-    LL_DMA_ClearFlag_GI6(DMA1);
+    LL_DMA_ClearFlag_TC6(DMA1);
     DMA1_Transfer_Complete_Callback();
   }
   else if(LL_DMA_IsActiveFlag_TE6(DMA1))

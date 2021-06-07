@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Release Notes for STM32CubeF1 Firmware Package</title>
-  <style>
+  <style type="text/css">
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
       span.underline{text-decoration: underline;}
@@ -65,10 +65,224 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1_8_3" aria-hidden="true"> <label for="collapse-section1_8_3" aria-hidden="true"><strong>V1.8.3 / 20-October-2020</strong></label>
+<input type="checkbox" id="collapse-section1_8_4" checked aria-hidden="true"> <label for="collapse-section1_8_4" aria-hidden="true"><strong>V1.8.4 / 21-May-2021</strong></label>
 <div>
 <h1 id="maintenance-release">Maintenance release</h1>
 <h2 id="main-changes">Main Changes</h2>
+<ul>
+<li><p>Patch release to fix known defects and enhancements implementation.</p></li>
+<li><strong>CMSIS</strong> updates
+<ul>
+<li>Improve GCC startup files robustness.</li>
+<li>Add LSI maximum startup time datasheet value: LSI_STARTUP_TIME.</li>
+<li>Add atomic register access macros.</li>
+<li>File “startup_stm32f105xc.s” updated to call static constructors.</li>
+</ul></li>
+<li><strong>HAL</strong> updates
+<ul>
+<li><strong>HAL/LL ADC</strong> driver
+<ul>
+<li>Update LL_ADC_DeInit() API to clear missing SQR3 register.</li>
+<li>Update timeout mechanism to avoid false timeout detection in case of preemption.</li>
+</ul></li>
+<li><strong>HAL EXTI</strong> driver
+<ul>
+<li>Update macros using LINE as a macro parameter in order to use EXTI_LINE instead to resolve parameter conflicts with standard C usage.</li>
+</ul></li>
+<li><strong>LL GPIO</strong> driver
+<ul>
+<li>Update LL_GPIO_Init() API to configure the Pin Pull only in INPUT mode.</li>
+</ul></li>
+<li><strong>HAL/LL RTC</strong> driver
+<ul>
+<li>Correct values assigned to macros LL_RTC_BKP_DR11 to LL_RTC_BKP_DR42 to be inline with actual registers mapping.</li>
+<li>Update APIs LL_RTC_TIME_Init() and LL_RTC_ALARM_Init() to correctly check the RTC_Format (BIN or BCD).</li>
+<li>Fix flag clearing operation for HAL_RTC_ALARM_CLEAR_FLAG and HAL_RTC_SECOND_CLEAR_FLAG macros.</li>
+</ul></li>
+<li><strong>HAL/LL TIM</strong> driver
+<ul>
+<li>Made TIM_DMADelayPulseCplt callback as a private function.</li>
+<li>Update HAL_TIMEx_OnePulseN_Start and HAL_TIMEx_OnePulseN_Stop (pooling and IT mode) to take into consideration all OutputChannel parameters.</li>
+<li>Update input capture measurement in DMA mode to avoid zero return values at high frequencies.</li>
+<li>Update LL_TIM_GetCounterMode() API to return the correct counter mode.</li>
+<li>Correct reversed description of TIM_LL_EC_ONEPULSEMODE One Pulse Mode.</li>
+</ul></li>
+<li><strong>HAL/LL SPI</strong> driver
+<ul>
+<li>Update LL_SPI_TransmitData8() API to avoid casting the result to 8 bits.</li>
+<li>Update to fix MISRA-C 2012 Rule-13.2.</li>
+</ul></li>
+<li><strong>HAL/LL I2C</strong> driver
+<ul>
+<li>Update to avoid I2C interrupt in endless loop:
+<ul>
+<li>Update HAL_I2C_Master_Transmit_IT(), HAL_I2C_Master_Receive_IT(), HAL_I2C_Master_Transmit_DMA() and HAL_I2C_Master_Receive_DMA() APIs to unlock the I2C peripheral before generating the start.</li>
+</ul></li>
+<li>Update the management of (hi2c-&gt;hdmatx!=NULL) &amp; (hi2c-&gt;hdmarx!=NULL) check.</li>
+<li>Update to prevent several calls of Start bit:
+<ul>
+<li>Update I2C_MemoryTransmit_TXE_BTF() API to increment EventCount.</li>
+</ul></li>
+<li>Update to use the right macro to clear I2C ADDR flag inside I2C_Slave_ADDR() API as it’s indicated in the reference manual.</li>
+<li>Update HAL_I2C_EV_IRQHandler() and I2C_MasterTransmit_BTF() APIs to fix an issue where the transfer of the first few bytes to an I2C memory fails.</li>
+</ul></li>
+<li><strong>HAL NAND</strong> driver
+<ul>
+<li>Update functions HAL_NAND_Read_SpareArea_16b() and HAL_NAND_Write_SpareArea_16b() to fix column address calculation issue</li>
+<li>Update implementation of “HAL_NAND_Write_Page_16b” and “HAL_NAND_Read_Page_16b” APIs implementation to fix an issue with the page calculation of 8 bits memories</li>
+</ul></li>
+<li><strong>LL USART</strong> driver
+<ul>
+<li>Remove useless check on maximum BRR value by removing IS_LL_USART_BRR_MAX() macro.</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Enhance reception for idle services (ReceptionToIdle):
+<ul>
+<li>Add a new field (HAL_UART_RxTypeTypeDef) to the UART_HandleTypeDef structure to identify the type of ongoing reception.</li>
+<li>Add UART Reception Event Callback registration.</li>
+<li>Add reception specific APIs specific to reception for Idle transfer in different modes:</li>
+<li>HAL_UARTEx_ReceiveToIdle(): Receive an amount of data in blocking mode until either the expected number of data is received or an IDLE event occurs.</li>
+<li>HAL_UARTEx_ReceiveToIdle_IT(): Receive an amount of data in interrupt mode until either the expected number of data is received or an IDLE event occurs.</li>
+<li>HAL_UARTEx_ReceiveToIdle_DMA(): Receive an amount of data in DMA mode until either the expected number of data is received or an IDLE event occurs.</li>
+</ul></li>
+<li>Update HAL_UART_Receive(), HAL_UART_Receive_IT() and HAL_UART_Receive_DMA() APIs to support the new enhancement of ReceptionToIdle.</li>
+<li>Fixe wrong comment related to RX pin configuration within the description section.</li>
+<li>Correction on UART ReceptionType management in case of ReceptionToIdle API are called from RxEvent callback.</li>
+</ul></li>
+<li><strong>HAL SMARTCARD</strong> driver
+<ul>
+<li>Fix typos in the SMARTCARD State definition description.</li>
+</ul></li>
+<li><strong>HAL IRDA</strong> driver
+<ul>
+<li>Fix typos in the IRDA State definition description.</li>
+</ul></li>
+<li><strong>LL TIM</strong> driver
+<ul>
+<li>Update LL_TIM_GetCounterMode() API to return the correct counter mode.</li>
+<li>Correct reversed description of TIM_LL_EC_ONEPULSEMODE One Pulse Mode.</li>
+</ul></li>
+<li><strong>HAL CAN</strong> driver
+<ul>
+<li>Update HAL_CAN_Init() API to be aligned with reference manual and to avoid timeout error:</li>
+<li>Update CAN Initialization sequence to set “request initialization” bit before exit from sleep mode.</li>
+</ul></li>
+<li><strong>LL UTILS</strong> driver
+<ul>
+<li>Add a new LL_PLL_ConfigSystemClock_PLL2() API to configure system clock with HSE as clock source of the PLL, via PLL2.</li>
+</ul></li>
+<li><strong>HAL IWDG</strong> driver
+<ul>
+<li>Update HAL_IWDG_Init() API in order to fix HAL_GetTick() timeout vulnerability issue.</li>
+<li>Add LSI startup time in default IWDG timeout calculation (HAL_IWDG_DEFAULT_TIMEOUT).</li>
+</ul></li>
+<li><strong>LL FMC</strong> driver
+<ul>
+<li>Fix compilation warning with gcc -Wpedantic compiler option.</li>
+</ul></li>
+<li><strong>HAL SDMMC</strong> driver
+<ul>
+<li>Update the definition of SDMMC_DATATIMEOUT constant in order to allow the user to redefine it in his proper application</li>
+<li>SD_FindSCR() updated to resolve an issue with FIFO blocking when reading.</li>
+<li>Update the definition of SDMMC_DATATIMEOUT constant in order to allow the user to redefine it in his proper application</li>
+<li>Add the block size settings in the initialization functions and remove it from read/write transactions to avoid repeated and inefficient reconfiguration.</li>
+<li>Update read/write functions in DMA mode in order to force the DMA direction.</li>
+<li>Deploy new functions MMC_ReadExtCSD() and SDMMC_CmdSendEXTCSD () that read and check the sectors number of the device in order to resolve the issue of wrongly reading big memory size.</li>
+</ul></li>
+<li><strong>HAL USB</strong> driver
+<ul>
+<li>HAL PCD: add fix transfer complete for IN Interrupt transaction in single buffer mode.</li>
+<li>Race condition in USB PCD control endpoint receive ISR.</li>
+</ul></li>
+</ul></li>
+<li><strong>Projects</strong> updates
+<ul>
+<li>Update examples and applications to avoid clearing DMA using global flag GIFx.</li>
+</ul></li>
+</ul>
+<h2 id="contents">Contents</h2>
+<ul>
+<li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
+<li>Projects release notes
+<ul>
+<li>STM32F103RB-Nucleo
+<ul>
+<li>Applications [release notes] (Projects32F103RB-Nucleo_Notes.html)</li>
+<li>Demonstrations [release notes] (Projects32F103RB-Nucleo_Notes.html)</li>
+<li>Examples [release notes] (Projects32F103RB-Nucleo_Notes.html)</li>
+<li>Examples_LL [release notes] (Projects32F103RB-Nucleo_LL_Notes.html)</li>
+<li>Examples_MIX [release notes] (Projects32F103RB-Nucleo_MIX_Notes.html)</li>
+<li>Templates [release notes] (Projects32F103RB-Nucleo_Notes.html)</li>
+<li>Templates_LL <a href="Projects\STM32F103RB-Nucleo\Templates_LL\Release_Notes.html">release notes</a></li>
+</ul></li>
+<li>STM32VL-Discovery
+<ul>
+<li>Examples <a href="Projects\STM32VL-Discovery\Examples\Release_Notes.html">release notes</a></li>
+<li>Templates <a href="Projects\STM32VL-Discovery\Templates\Release_Notes.html">release notes</a></li>
+<li>Templates_LL <a href="Projects\STM32VL-Discovery\Templates_LL\Release_Notes.html">release notes</a></li>
+</ul></li>
+<li>STM3210C_EVAL
+<ul>
+<li>Applications [release notes] (Projects3210C_EVAL_Notes.html)</li>
+<li>Examples [release notes] (Projects3210C_EVAL_Notes.html)</li>
+<li>Templates [release notes] (Projects3210C_EVAL_Notes.html)</li>
+<li>Templates_LL [release notes] (Projects3210C_EVAL_Notes.html)</li>
+</ul></li>
+<li>STM3210E_EVAL
+<ul>
+<li>Applications [release notes] (Projects3210E_EVAL_Notes.html)</li>
+<li>Examples [release notes] (Projects3210E_EVAL_Notes.html)</li>
+<li>Examples_LL [release notes] (Projects3210E_EVAL_LL_Notes.html)</li>
+<li>Examples_MIX [release notes] (Projects3210E_EVAL_MIX_Notes.html)</li>
+<li>Templates [release notes] (Projects3210E_EVAL_Notes.html)</li>
+<li>Templates_LL [release notes] (Projects3210E_EVAL_LL_Notes.html)</li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: center;">Version</th>
+<th style="text-align: center;">Licence</th>
+<th style="text-align: center;">Release note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>STM32F1xx CMSIS</strong></td>
+<td style="text-align: center;"><strong>V4.3.3</strong></td>
+<td style="text-align: center;"><a href="https://opensource.org/licenses/Apache-2.0">Apache License 2.0</a></td>
+<td style="text-align: center;"><a href="Drivers/CMSIS/Device/ST/STM32F1xx/Release_Notes.html">release notes</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>STM32F1xx HAL</strong></td>
+<td style="text-align: center;"><strong>V1.1.8</strong></td>
+<td style="text-align: center;"><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></td>
+<td style="text-align: center;"><a href="Drivers/STM32F1xx_HAL_Driver/Release_Notes.html">release notes</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>BSP STM3210C_EVAL</strong></td>
+<td style="text-align: center;"><strong>V7.0.1</strong></td>
+<td style="text-align: center;"><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></td>
+<td style="text-align: center;"><a href="Drivers/BSP/STM3210C_EVAL/Release_Notes.html">release notes</a></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain <strong>V8.40.2</strong>+ ST-Link</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain <strong>V5.31</strong> + ST-LINK</li>
+<li>System Workbench for STM32 (SW4STM32) toolchain V2.9 + ST-Link</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1_8_3" aria-hidden="true"> <label for="collapse-section1_8_3" aria-hidden="true"><strong>V1.8.3 / 20-October-2020</strong></label>
+<div>
+<h1 id="maintenance-release-1">Maintenance release</h1>
+<h2 id="main-changes-1">Main Changes</h2>
 <ul>
 <li><p>Patch release of STM32CubeF1 Firmware Package.</p></li>
 <li><p><strong>HAL</strong></p>
@@ -86,7 +300,7 @@
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents">Contents</h2>
+<h2 id="contents-1">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -111,11 +325,11 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1_8_2" aria-hidden="true"> <label for="collapse-section1_8_2" aria-hidden="true"><strong>V1.8.2 / 07-September-2020</strong></label>
 <div>
-<h1 id="maintenance-release-1">Maintenance release</h1>
-<h2 id="main-changes-1">Main Changes</h2>
+<h1 id="maintenance-release-2">Maintenance release</h1>
+<h2 id="main-changes-2">Main Changes</h2>
 <ul>
 <li><p>Patch release to fix known defects and enhancements implementation</p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li><strong>HAL/LL ADC</strong> driver
 <ul>
@@ -289,7 +503,7 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>All header files
 <ul>
@@ -300,7 +514,7 @@
 <li>SystemInit(): update to don’t reset RCC registers to its reset values.</li>
 </ul></li>
 </ul>
-<h2 id="contents-1">Contents</h2>
+<h2 id="contents-2">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -367,7 +581,7 @@
 <ul>
 <li>SW4STM32 projects aren’t provided for STM32VL-Discovery board because it embeds STLinv1 version that is not hardware supported by SW4STM32 toolchain.</li>
 </ul>
-<h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.20.2+ ST-Link</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.26 + ST-LINK</li>
@@ -394,8 +608,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1_8_1" aria-hidden="true"> <label for="collapse-section1_8_1" aria-hidden="true"><strong>V1.8.1 / 30-July-2020</strong></label>
 <div>
-<h1 id="maintenance-release-2">Maintenance release</h1>
-<h2 id="main-changes-2">Main Changes</h2>
+<h1 id="maintenance-release-3">Maintenance release</h1>
+<h2 id="main-changes-3">Main Changes</h2>
 <ul>
 <li><p>Patch release to fix known defects and enhancements implementation</p></li>
 <li><p><strong>HAL</strong></p>
@@ -447,7 +661,7 @@
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents-2">Contents</h2>
+<h2 id="contents-3">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -472,15 +686,15 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.8.0 / 26-June-2019</strong></label>
 <div>
-<h1 id="maintenance-release-3">Maintenance release</h1>
-<h2 id="main-changes-3">Main Changes</h2>
+<h1 id="maintenance-release-4">Maintenance release</h1>
+<h2 id="main-changes-4">Main Changes</h2>
 <ul>
-<li><p>General updates to fix known defects and enhancements implementation</p></li>
-<li><p>Remove support of TrueSTUDIO tool chain</p></li>
-<li><p>General updates to fix CodeSonar compilation warnings</p></li>
-<li><p>General updates to fix the user manual .chm files</p></li>
-<li><p>Add support of HAL callback registration feature</p></li>
-<li><p><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong></p>
+<li>General updates to fix known defects and enhancements implementation</li>
+<li>Remove support of TrueSTUDIO tool chain</li>
+<li>General updates to fix CodeSonar compilation warnings</li>
+<li>General updates to fix the user manual .chm files</li>
+<li>Add support of HAL callback registration feature</li>
+<li><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong>
 <ul>
 <li>Add support of <strong>HAL callback registration</strong> feature
 <ul>
@@ -499,7 +713,7 @@
 </ul></li>
 </ul></li>
 <li><p>Demonstrations binaries are no more delivered within the STM32CubeF1 MCU package. They are available for download, in addition to their required media files if any, in a standalone package accessible through each hardware board official webpage. Please refer to the corresponding demonstration binary readme.txt to get webpage for each board.</p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li>Add support of HAL callback registration feature</li>
 <li>Add new <strong>HAL EXTI</strong> driver</li>
@@ -520,14 +734,14 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>Fix known defects and several implementation enhancement</li>
 <li>Fix wrong initialization value for “SystemCoreClock” in System_stm32f1xx.c file</li>
 <li>Update gcc linker file template to be aligned with AC6 linker file template</li>
 <li>Align ErrorStatus typedef to common error handling</li>
 </ul></li>
-<li><p><strong>Middleware</strong></p>
+<li><strong>Middleware</strong>
 <ul>
 <li>Update to use FreeRTOS <strong>10.0.1</strong> ST modified <strong>20190329</strong></li>
 <li>Update to use STemWin <strong>V5.44</strong> ST modified <strong>20180322</strong></li>
@@ -535,7 +749,7 @@
 <li>Update to use USB Host Library <strong>V3.3.3</strong></li>
 <li>Update to use new version of LwIP <strong>V2.0.3</strong></li>
 </ul></li>
-<li><p><strong>Projects</strong></p>
+<li><strong>Projects</strong>
 <ul>
 <li>Update STemWin applications to be compliant with new STemWin architecture</li>
 <li>Update USB HOST projects to be compliant with USB Host Stack <strong>V3.3.3:</strong>
@@ -565,7 +779,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-3">Contents</h2>
+<h2 id="contents-4">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -816,7 +1030,7 @@
 <li>SW4STM32 projects aren’t provided for STM32VL-Discovery board because it embeds STLinv1 version that is not hardware supported by SW4STM32 toolchain.</li>
 <li>Register callback feature will be deployed on HAL I2C driver in next release</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain <strong>V8.20.2</strong>+ ST-Link</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain <strong>V5.26</strong> + ST-LINK</li>
@@ -843,8 +1057,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.7.0 / 09-October-2018</strong></label>
 <div>
-<h1 id="maintenance-release-4">Maintenance release</h1>
-<h2 id="main-changes-4">Main Changes</h2>
+<h1 id="maintenance-release-5">Maintenance release</h1>
+<h2 id="main-changes-5">Main Changes</h2>
 <ul>
 <li>General update to fix known defects and several implementations enhancement</li>
 <li><strong>The following changes done on the HAL drivers require an update on the application code based on older HAL versions</strong>
@@ -872,7 +1086,7 @@
 </ul></li>
 <li>For the complete list of changes, please refer to the release notes of each firmware component</li>
 </ul>
-<h2 id="contents-4">Contents</h2>
+<h2 id="contents-5">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1122,7 +1336,7 @@
 <ul>
 <li>SW4STM32 projects aren’t provided for STM32VL-Discovery board because it embeds STLinv1 version that is not hardware supported by SW4STM32 toolchain.</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.23</li>
@@ -1150,12 +1364,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section68" aria-hidden="true"> <label for="collapse-section68" aria-hidden="true"><strong>V1.6.1 / 09-March-2018</strong></label>
 <div>
-<h1 id="maintenance-release-5">Maintenance release</h1>
-<h2 id="main-changes-5">Main Changes</h2>
+<h1 id="maintenance-release-6">Maintenance release</h1>
+<h2 id="main-changes-6">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issues in GPIO, RCC, SMARTCARD, I2C and Generic HAL/LL drivers</strong></li>
 </ul>
-<h2 id="contents-5">Contents</h2>
+<h2 id="contents-6">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -1177,23 +1391,23 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V1.6.0 / 12-May-2017</strong></label>
 <div>
-<h1 id="maintenance-release-6">Maintenance release</h1>
-<h2 id="main-changes-6">Main Changes</h2>
+<h1 id="maintenance-release-7">Maintenance release</h1>
+<h2 id="main-changes-7">Main Changes</h2>
 <ul>
 <li><p>General update to fix known defects and several implementations enhancement</p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li>stm32f1xx_hal_conf_template.h fix typo: update to refer to stm32f1xx_hal_mmc.h instead of stm32f4xx_hal_mmc.h</li>
 <li>stm32f1xx_hal_mmc.c add missing () to fix compilation warning detected with SW4STM32 when extra feature is enabled.</li>
 <li>stm32f1xx_ll_system.h: fix typo in LL_DBGMCU_APB1_GRP1_I2C1_STOP and LL_DBGMCU_APB1_GRP1_I2C2_STOP literals definition</li>
 </ul></li>
-<li><p><strong>Projects</strong></p>
+<li><strong>Projects</strong>
 <ul>
 <li>General updates to be compliant with Linux platforms</li>
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-6">Contents</h2>
+<h2 id="contents-7">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1443,7 +1657,7 @@
 <ul>
 <li>SW4STM32 projects aren’t provided for STM32VL-Discovery board because it embeds STLinv1 version that is not hardware supported by SW4STM32 toolchain.</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-4">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.23</li>
@@ -1471,10 +1685,10 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V1.5.0 / 14-April-2017</strong></label>
 <div>
-<h1 id="maintenance-release-7">Maintenance release</h1>
-<h2 id="main-changes-7">Main Changes</h2>
+<h1 id="maintenance-release-8">Maintenance release</h1>
+<h2 id="main-changes-8">Main Changes</h2>
 <ul>
-<li><p>Add Low Layer drivers under Drivers32F1xx_HAL_Driver</p>
+<li>Add Low Layer drivers under Drivers32F1xx_HAL_Driver
 <ul>
 <li>Low Layer drivers allow performance and memory footprint optimization</li>
 <li>Low Layer drivers APIs provide register level programming: they require deep knowledge of peripherals described in STM32F1xx Reference Manuals</li>
@@ -1483,7 +1697,7 @@
 <li>Refer to [UM1847] (http://www.st.com/st-web-ui/static/active/en/resource/technical/document/user_manual/DM00151047.pdf) for Low Layer presentation and [UM1850] (http://www.st.com/st-web-ui/static/active/en/resource/technical/document/user_manual/DM00154093.pdf) for API list</li>
 </ul></li>
 <li><p>General update to fix known defects and several implementations enhancement</p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li>Add Low Layer drivers under Drivers32F1xx_HAL_Driver</li>
 <li>Add new <strong>MMC</strong> HAL driver</li>
@@ -1534,12 +1748,12 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>Fix known defects and several implementation enhancement</li>
 <li>General update to support Low layer drivers (LL)</li>
 </ul></li>
-<li><p><strong>Middleware</strong></p>
+<li><strong>Middleware</strong>
 <ul>
 <li>Update STemWin Library V5.32 with a new build with EWARM V7.80</li>
 <li>Upgrade to use new version of LwIP V2.0.0
@@ -1549,7 +1763,7 @@
 <li>Update to new version of FreeRTOS V9.0.0</li>
 <li>Update FatFS to implement changes on sd_diskio.c file to be aligned with HAL SD driver and BSP drivers API changes.</li>
 </ul></li>
-<li><p><strong>Projects</strong></p>
+<li><strong>Projects</strong>
 <ul>
 <li>General updates to fix known defects and enhancements implementation</li>
 <li>Add Low Layer examples and MIX examples on the STM32F103RB-Nucleo, STM32F10E-EVAL boards</li>
@@ -1559,7 +1773,7 @@
 </ul></li>
 <li><p>For the complete list of changes, please refer to the release notes of each firmware component</p></li>
 </ul>
-<h2 id="contents-7">Contents</h2>
+<h2 id="contents-8">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -1809,7 +2023,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-4">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-5">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.23</li>
@@ -1837,11 +2051,11 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.4.0 / 29-April-2016</strong></label>
 <div>
-<h1 id="maintenance-release-8">Maintenance release</h1>
-<h2 id="main-changes-8">Main Changes</h2>
+<h1 id="maintenance-release-9">Maintenance release</h1>
+<h2 id="main-changes-9">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li><strong>HAL RCC</strong>
 <ul>
@@ -1873,13 +2087,13 @@
 <li>Adapt FSMC_NAND_Init behavior to the others STM32 series by reseting the bit FSMC_PCRx_PBKEN.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>Add _Pos and _Msk defines to be used with _VAL2FLD(field, value) and _FLD2VAL(field, value).</li>
 <li>The previous naming are kept for backward compatibility.</li>
 <li>Add APBPrescTable constant to list APB prescalers values.</li>
 </ul></li>
-<li><p><strong>BSP</strong></p>
+<li><strong>BSP</strong>
 <ul>
 <li>STM32F1xx_Nucleo
 <ul>
@@ -1894,17 +2108,17 @@
 <li>Set the NVIC priority to the lowest possible to not interfere with user settings.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>Middlewares</strong></p>
+<li><strong>Middlewares</strong>
 <ul>
 <li>Update to FreeRTOS V8.2.3.</li>
 <li>Update to STM32 USB Device Library V2.4.2</li>
 </ul></li>
-<li><p><strong>Others</strong></p>
+<li><strong>Others</strong>
 <ul>
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-8">Contents</h2>
+<h2 id="contents-9">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2153,7 +2367,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-5">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-6">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.17 + ST-LINK</li>
@@ -2181,15 +2395,15 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.3.1 / 11-January-2016</strong></label>
 <div>
-<h1 id="maintenance-release-9">Maintenance release</h1>
-<h2 id="main-changes-9">Main Changes</h2>
+<h1 id="maintenance-release-10">Maintenance release</h1>
+<h2 id="main-changes-10">Main Changes</h2>
 <ul>
 <li><strong>Patch release to fix issue in HAL driver:</strong>
 <ul>
 <li>Remove the #if defined(USE_HAL_LEGACY) condition to include Legacy/stm32_hal_legacy.h by default, in stm32f1xx_hal_def.h.</li>
 </ul></li>
 </ul>
-<h2 id="contents-9">Contents</h2>
+<h2 id="contents-10">Contents</h2>
 <table>
 <thead>
 <tr class="header">
@@ -2212,7 +2426,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-6">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-7">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.17 + ST-LINK</li>
@@ -2240,11 +2454,11 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.3.0 / 18-December-2015</strong></label>
 <div>
-<h1 id="maintenance-release-10">Maintenance release</h1>
-<h2 id="main-changes-10">Main Changes</h2>
+<h1 id="maintenance-release-11">Maintenance release</h1>
+<h2 id="main-changes-11">Main Changes</h2>
 <ul>
 <li><p><strong>Maintenance release to fix known defects and several enhancements implementation.</strong></p></li>
-<li><p><strong>HAL</strong></p>
+<li><strong>HAL</strong>
 <ul>
 <li>Insure that do {} while(0) are used in in multi statement macros. (hal eth and pcd)</li>
 <li>Manage simultaneous errors in IRQHandler. (hal uart, smartcard, usart and uart)</li>
@@ -2256,25 +2470,25 @@
 <li>Reduce the default timeout value for the startup of the HSE form 5s to 100ms.</li>
 <li>Update HAL weak empty callbacks to prevent unused argument compilation warnings with some compilers.</li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>Align bit name across all STM32 families (EXTI, WWDG) and keeping backward compatibility with aliases.</li>
 </ul></li>
-<li><p><strong>Middlewares</strong></p>
+<li><strong>Middlewares</strong>
 <ul>
 <li>Update to CMSIS V4.5.</li>
 </ul></li>
-<li><p><strong>Projects</strong></p>
+<li><strong>Projects</strong>
 <ul>
 <li>Update all Keil project from Keil V4 to Keil V5.</li>
 <li>Update all SW4STM32 projects to version 1.5.0.</li>
 </ul></li>
-<li><p><strong>Others</strong></p>
+<li><strong>Others</strong>
 <ul>
 <li>Add latest version of STM32CubeUpdater (V4.10.0).</li>
 </ul></li>
 </ul>
-<h2 id="contents-10">Contents</h2>
+<h2 id="contents-11">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2524,7 +2738,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-7">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-8">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.17 + ST-LINK</li>
@@ -2552,12 +2766,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0" aria-hidden="true"> <label for="collapse-section0" aria-hidden="true"><strong>V1.2.0 / 31-July-2015</strong></label>
 <div>
-<h1 id="maintenance-release-11">Maintenance release</h1>
-<h2 id="main-changes-11">Main Changes</h2>
+<h1 id="maintenance-release-12">Maintenance release</h1>
+<h2 id="main-changes-12">Main Changes</h2>
 <ul>
-<li><p><strong>Maintenance release.</strong></p></li>
+<li><strong>Maintenance release.</strong></li>
 <li><p><strong>Fix known defects and several enhancements implementation.</strong></p></li>
-<li><p><strong>Projects</strong></p>
+<li><strong>Projects</strong>
 <ul>
 <li>Adding new projects to introduce the FreeRTOS V8.2.1
 <ul>
@@ -2567,7 +2781,7 @@
 </ul></li>
 <li>Adding new application IAP for STM3210E_EVAL board.</li>
 </ul></li>
-<li><p><strong>FatFs</strong></p>
+<li><strong>FatFs</strong>
 <ul>
 <li>Upgrade to use FatFs R0.11.</li>
 <li>Add new APIs FATFS_LinkDriverEx() and FATFS_UnLinkDriverEx() to manage USB Key Disk having multi-lun capability. These APIs are equivalent to FATFS_LinkDriver() and FATFS_UnLinkDriver() with “lun” parameter set to 0.</li>
@@ -2577,7 +2791,7 @@
 <li>For application code based on previous FatFs version; when moving to R0.11 the changes that need to be done is to update ffconf.h file, taking ffconf_template.h file as reference.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>CMSIS</strong></p>
+<li><strong>CMSIS</strong>
 <ul>
 <li>CMSIS-Core V4.10
 <ul>
@@ -2599,7 +2813,7 @@
 <li>CMSIS-RTOS V1.02 (unchanged)</li>
 </ul></li>
 </ul>
-<h2 id="contents-11">Contents</h2>
+<h2 id="contents-12">Contents</h2>
 <ul>
 <li>The STM32CubeF1 Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with pre-configured projects for the main supported toolchains. The exhaustive list of projects is provided in this table <a href="Projects/STM32CubeProjectsList.html">STM32CubeProjectsList.html</a>.</li>
 <li>Projects release notes
@@ -2842,7 +3056,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-8">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-9">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.10 + ST-LINK
@@ -2873,20 +3087,20 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section000" aria-hidden="true"> <label for="collapse-section000" aria-hidden="true"><strong>V1.1.0 / 05-June-2015</strong></label>
 <div>
-<h1 id="maintenance-release-12">Maintenance release</h1>
-<h2 id="main-changes-12">Main Changes</h2>
+<h1 id="maintenance-release-13">Maintenance release</h1>
+<h2 id="main-changes-13">Main Changes</h2>
 <ul>
 <li><p><strong>Add support of System Workbench for STM32 (SW4STM32) toolchain</strong></p></li>
-<li><p><strong>HAL</strong></p></li>
+<li><strong>HAL</strong></li>
 <li><p>No changes</p></li>
-<li><p><strong>Middlewares</strong></p></li>
+<li><strong>Middlewares</strong></li>
 <li><p>No changes</p></li>
-<li><p><strong>BSP</strong></p></li>
+<li><strong>BSP</strong></li>
 <li><p>No changes</p></li>
-<li><p><strong>Projects</strong></p></li>
+<li><strong>Projects</strong></li>
 <li><p>Add projects for SW4STM32 toolchain</p></li>
 </ul>
-<h2 id="contents-12">Contents</h2>
+<h2 id="contents-13">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -3098,7 +3312,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-9">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-10">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.10 + ST-LINK</li>
@@ -3126,12 +3340,12 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section0000" aria-hidden="true"> <label for="collapse-section0000" aria-hidden="true"><strong>V1.0.0 / 17-December-2014</strong></label>
 <div>
-<h1 id="maintenance-release-13">Maintenance release</h1>
-<h2 id="main-changes-13">Main Changes</h2>
+<h1 id="maintenance-release-14">Maintenance release</h1>
+<h2 id="main-changes-14">Main Changes</h2>
 <ul>
 <li><strong>First official release of STM32CubeF1 (STM32Cube for STM32F1 Series)</strong></li>
 </ul>
-<h2 id="contents-13">Contents</h2>
+<h2 id="contents-14">Contents</h2>
 <table>
 <caption>Drivers</caption>
 <thead>
@@ -3380,7 +3594,7 @@
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-10">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-11">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.20 + ST-LINK</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.10 + ST-LINK</li>

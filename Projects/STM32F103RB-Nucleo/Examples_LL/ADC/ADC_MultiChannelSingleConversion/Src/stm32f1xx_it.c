@@ -185,9 +185,8 @@ void DMA1_Channel1_IRQHandler(void)
   /* Check whether DMA transfer complete caused the DMA interruption */
   if(LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
   {
-    /* Clear flag DMA global interrupt */
-    /* (global interrupt flag: half transfer and transfer complete flags) */
-    LL_DMA_ClearFlag_GI1(DMA1);
+    /* Clear flag DMA transfer complete interrupt */
+    LL_DMA_ClearFlag_TC1(DMA1);
     /* Call interruption treatment function */
     AdcDmaTransferComplete_Callback();
   }

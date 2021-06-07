@@ -213,7 +213,7 @@ void DMA1_Channel3_IRQHandler(void)
 
   if(LL_DMA_IsActiveFlag_TC3(DMA1))
   {
-    LL_DMA_ClearFlag_GI3(DMA1);
+    LL_DMA_ClearFlag_TC3(DMA1);
     /* Call function Tranmission complete Callback */
     SPI1_DMA1_TransmitComplete_Callback();
   }
@@ -233,7 +233,7 @@ void DMA1_Channel2_IRQHandler(void)
 {
   if(LL_DMA_IsActiveFlag_TC2(DMA1))
   {
-    LL_DMA_ClearFlag_GI2(DMA1);
+    LL_DMA_ClearFlag_TC2(DMA1);
     /* Call function Reception complete Callback */
     SPI1_DMA1_ReceiveComplete_Callback();
   }

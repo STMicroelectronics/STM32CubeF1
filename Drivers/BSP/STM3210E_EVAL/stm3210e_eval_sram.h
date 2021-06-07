@@ -38,7 +38,7 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM3210E_EVAL_SRAM_H
-#define __STM3210e_EVAL_SRAM_H
+#define __STM3210E_EVAL_SRAM_H
 
 #ifdef __cplusplus
  extern "C" {
