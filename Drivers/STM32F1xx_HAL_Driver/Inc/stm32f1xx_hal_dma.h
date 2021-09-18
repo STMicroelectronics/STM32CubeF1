@@ -116,7 +116,7 @@ typedef struct __DMA_HandleTypeDef
   
   HAL_LockTypeDef       Lock;                            /*!< DMA locking object                     */  
   
-  HAL_DMA_StateTypeDef  State;                           /*!< DMA transfer state                     */
+  __IO HAL_DMA_StateTypeDef  State;                           /*!< DMA transfer state                     */
   
   void                  *Parent;                                                      /*!< Parent object state                    */  
   
