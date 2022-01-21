@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    EEPROM_Emulation/inc/eeprom.h 
+  * @file    EEPROM_Emulation/inc/eeprom.h
   * @author  MCD Application Team
-  * @brief   This file contains all the functions prototypes for the EEPROM 
+  * @brief   This file contains all the functions prototypes for the EEPROM
   *          emulation firmware library.
   ******************************************************************************
   * @attention
