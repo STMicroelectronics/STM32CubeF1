@@ -176,7 +176,7 @@ __STATIC_INLINE void  Configure_TIM(void)
   
   /* TIM3CLK = SystemCoreClock / (APB prescaler & multiplier)              */
   TimOutClock = SystemCoreClock/1;
-  LL_TIM_SetAutoReload(TIM3, __LL_TIM_CALC_ARR(TimOutClock, LL_TIM_COUNTERMODE_UP, 17570));
+  LL_TIM_SetAutoReload(TIM3, __LL_TIM_CALC_ARR(TimOutClock, LL_TIM_GetPrescaler(TIM3), 17570));
   
   /* Set the repetition counter in order to generate one update event every 4 */
   /* counter cycles.                                                          */
