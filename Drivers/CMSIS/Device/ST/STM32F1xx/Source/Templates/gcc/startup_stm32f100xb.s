@@ -376,8 +376,8 @@ g_pfnVectors:
 
   .weak  SPI1_IRQHandler
   .thumb_set SPI1_IRQHandler,Default_Handler
-  
-  .weak  SPI1_IRQHandler
+
+  .weak  SPI2_IRQHandler
   .thumb_set SPI2_IRQHandler,Default_Handler
 
   .weak  USART1_IRQHandler
