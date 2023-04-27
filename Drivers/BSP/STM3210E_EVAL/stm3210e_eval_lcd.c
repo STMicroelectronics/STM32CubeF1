@@ -23,7 +23,7 @@
        (++) Initialize the LCD using the BSP_LCD_Init() function.
   
    (#) Display on LCD
-       (++) Clear the hole LCD using yhe BSP_LCD_Clear() function or only one specified 
+       (++) Clear the hole LCD using the BSP_LCD_Clear() function or only one specified 
             string line using the BSP_LCD_ClearStringLine() function.
        (++) Display a character on the specified line and column using the BSP_LCD_DisplayChar()
             function or a complete string line using the BSP_LCD_DisplayStringAtLine() function.
@@ -35,29 +35,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */ 
@@ -178,7 +161,7 @@ uint8_t BSP_LCD_Init(void)
   #if defined(AFIO_MAPR2_FSMC_NADV_REMAP)
     /* Disconnect FSMC pin NADV.                                              */
     /* FSMC and I2C share the same I/O pin: NADV/SDA (PB7). Since this pin    */
-    /* is not used by FSMC on STM32F10E_EVAL board, disconnect it internaly   */
+    /* is not used by FSMC on STM32F10E_EVAL board, disconnect it internally   */
     /* from FSMC to let it dedicated to I2C1 without sharing constraints.     */
     __HAL_AFIO_FSMCNADV_DISCONNECTED();
   #else
@@ -1103,4 +1086,3 @@ static void LCD_SetDisplayWindow(uint16_t Xpos, uint16_t Ypos, uint16_t Width, u
   * @}
   */     
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

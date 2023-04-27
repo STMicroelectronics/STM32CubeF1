@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -93,7 +92,7 @@ void tcp_echoclient_connect(void)
 
 /**
   * @brief Function called when TCP connection established
-  * @param tpcb: pointer on the connection contol block
+  * @param tpcb: pointer on the connection control block
   * @param err: when connection correctly established err should be ERR_OK 
   * @retval err_t: returned error 
   */
@@ -103,7 +102,7 @@ static err_t tcp_echoclient_connected(void *arg, struct tcp_pcb *tpcb, err_t err
   
   if (err == ERR_OK)   
   {
-    /* allocate structure es to maintain tcp connection informations */
+    /* allocate structure es to maintain tcp connection information */
     es = (struct echoclient *)mem_malloc(sizeof(struct echoclient));
   
     if (es != NULL)
@@ -161,7 +160,7 @@ static err_t tcp_echoclient_connected(void *arg, struct tcp_pcb *tpcb, err_t err
   * @param arg: argument to be passed to receive callback 
   * @param tpcb: tcp connection control block 
   * @param err: receive error code 
-  * @retval err_t: retuned error  
+  * @retval err_t: returned error  
   */
 static err_t tcp_echoclient_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 { 
@@ -363,5 +362,3 @@ static void tcp_echoclient_connection_close(struct tcp_pcb *tpcb, struct echocli
 }
 
 #endif /* LWIP_TCP */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

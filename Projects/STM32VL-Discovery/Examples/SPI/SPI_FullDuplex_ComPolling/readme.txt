@@ -9,13 +9,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -77,7 +76,7 @@ Finally, aRxBuffer and aTxBuffer are compared through Buffercmp() in order to
 check buffers correctness.  
 
 STM32 board's LEDs can be used to monitor the transfer status:
- - LED3 toggles quicly on master board waiting user button to be pressed.
+ - LED3 toggles quickly on master board waiting user button to be pressed.
  - LED3 turns ON if transmission/reception is complete and OK.
  - LED4 turns ON when there is an error in transmission/reception process.  
  - LED4 toggle when there is a timeout error in transmission/reception process.  
@@ -133,6 +132,5 @@ In order to make the program work, you must do the following:
     o Comment "#define MASTER_BOARD" and load the project in Slave Board
  - Run the example
 
- * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
- */
- 
+
+  */

@@ -9,29 +9,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -77,7 +60,7 @@ typedef struct
   */
 /* EEPROMs hardware address and page size */ 
 #define EEPROM_ADDRESS_M24C64_32      0xA0    /* Support the devices: M24C32 and M24C64 */
-/* The M24C08W contains 4 blocks (128byte each) with the adresses below: E2 = 0 
+/* The M24C08W contains 4 blocks (128byte each) with the addresses below: E2 = 0 
    EEPROM Addresses defines */
 #define EEPROM_ADDRESS_M24C08_BLOCK0      0xA0
 #define EEPROM_ADDRESS_M24C08_BLOCK1      0xA2
@@ -113,7 +96,7 @@ uint32_t  BSP_EEPROM_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, uint32_t 
 /* USER Callbacks: This function is declared as __weak in EEPROM driver and 
    should be implemented into user application.  
    BSP_EEPROM_TIMEOUT_UserCallback() function is called whenever a timeout condition 
-   occure during communication (waiting on an event that doesn't occur, bus 
+   occur during communication (waiting on an event that doesn't occur, bus 
    errors, busy devices ...). */
 void BSP_EEPROM_TIMEOUT_UserCallback(void);
 
@@ -145,4 +128,3 @@ HAL_StatusTypeDef       EEPROM_I2C_IO_IsDeviceReady(uint16_t DevAddress, uint32_
   * @}
   */ 
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,17 +2,16 @@
   ******************************************************************************
   * @file    LwIP/LwIP_TCP_Echo_Server/Src/app_ethernet.c 
   * @author  MCD Application Team
-  * @brief   Ethernet specefic module
+  * @brief   Ethernet specific module
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -37,7 +36,7 @@ __IO uint8_t DHCP_state = DHCP_OFF;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /**
-  * @brief  Notify the User about the nework interface config status 
+  * @brief  Notify the User about the network interface config status 
   * @param  netif: the network interface
   * @retval None
   */
@@ -235,5 +234,3 @@ void DHCP_Periodic_Handle(struct netif *netif)
   }
 }
 #endif
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

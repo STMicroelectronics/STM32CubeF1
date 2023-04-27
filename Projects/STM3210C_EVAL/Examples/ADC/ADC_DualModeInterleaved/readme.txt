@@ -9,13 +9,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -60,7 +59,7 @@ ADC conversion results:
    - ADC slave results in the 16 MSB [31:16] (with ADC resolution 12 bits, bits effectively used are [27:16])
 
  - DMA are configured to operate continuously, in circular mode.
-   Data is transfered by words every ADC1+ADC2 conversions.
+   Data is transferred by words every ADC1+ADC2 conversions.
    When DMA transfer half-buffer and complete buffer length are reached, callbacks 
    HAL_ADC_ConvCpltCallback() and HAL_ADC_ConvCpltCallback() are called.
 
@@ -118,5 +117,5 @@ In order to make the program work, you must do the following :
  - Rebuild all files and load your image into target memory
  - Run the example
 
- * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
+
  */

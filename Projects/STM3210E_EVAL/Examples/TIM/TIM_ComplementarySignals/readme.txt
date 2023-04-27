@@ -9,13 +9,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -39,7 +38,7 @@ The channel 3 duty cycle is set to 12.5% so channel 3N is set to 87.5%.
 The Timer pulse is calculated as follows:
   - ChannelxPulse = DutyCycle * (TIM1_Period - 1) / 100
 
-A dead time equal to 100/SystemCoreClock (arround 2.1us) is inserted between 
+A dead time equal to 100/SystemCoreClock (around 2.1us) is inserted between 
 the different complementary signals, and the Lock level 1 is selected.
   - The OCx output signal is the same as the reference signal except for the rising edge,
     which is delayed relative to the reference rising edge.
@@ -104,5 +103,5 @@ In order to make the program work, you must do the following :
  - Rebuild all files and load your image into target memory
  - Run the example
 
- * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
+
  */

@@ -5,16 +5,15 @@
   * @brief   This example describes how to send/receive bytes over I2C IP using
   *          the STM32F1xx I2C LL API.
   *          Peripheral initialization done using LL unitary services functions.
-******************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -143,7 +142,7 @@ int main(void)
   * @note   This function is used to :
   *         -1- Enable DMA1 clock
   *         -2- Configure NVIC for DMA1.
-  *         -3- Configure the DMA1 functionnal parameters.
+  *         -3- Configure the DMA1 functional parameters.
   *         -4- Enable DMA1 interrupts complete/error.
   * @param   None
   * @retval  None
@@ -157,7 +156,7 @@ void Configure_DMA(void)
   NVIC_SetPriority(DMA1_Channel4_IRQn, 0);
   NVIC_EnableIRQ(DMA1_Channel4_IRQn);
 	
-  /* (3) Configure the DMA1 functionnal parameters */
+  /* (3) Configure the DMA1 functional parameters */
   LL_DMA_ConfigTransfer(DMA1, LL_DMA_CHANNEL_4, LL_DMA_DIRECTION_MEMORY_TO_PERIPH | \
                                                 LL_DMA_PRIORITY_HIGH              | \
                                                 LL_DMA_MODE_NORMAL                | \
@@ -542,7 +541,7 @@ void Handle_I2C_Slave(void)
   *        -2- Prepare acknowledge for Master data reception.
   *        -3- Initiate a Start condition to the Slave device.
   *        -4- Loop until end of transfer completed (DMA TC raised).
-  *        -5- End of tranfer, Data consistency are checking into Slave process.
+  *        -5- End of transfer, Data consistency are checking into Slave process.
   * @param  None
   * @retval None
   */
@@ -579,7 +578,7 @@ void Handle_I2C_Master(void)
 #endif /* USE_TIMEOUT */
   }
 
-  /* (5) End of tranfer, Data consistency are checking into Slave process *****/
+  /* (5) End of transfer, Data consistency are checking into Slave process *****/
 }
 
 /**
@@ -669,7 +668,7 @@ void Slave_Reception_Callback(void)
   */
 void Slave_Complete_Callback(void)
 {
-  /* Check if datas request to turn on the LED2 */
+  /* Check if data request to turn on the LED2 */
   if(Buffercmp8((uint8_t*)aReceiveBuffer, (uint8_t*)aLedOn, (ubReceiveIndex-1)) == 0)
   {
     /* Turn LED2 On:
@@ -759,5 +758,3 @@ void assert_failed(uint8_t *file, uint32_t line)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

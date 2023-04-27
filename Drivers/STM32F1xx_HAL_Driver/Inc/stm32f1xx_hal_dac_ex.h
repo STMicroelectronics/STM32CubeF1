@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -85,7 +84,7 @@ extern "C" {
 /** @defgroup DACEx_trigger_selection DAC trigger selection
   * @{
   */
-#define DAC_TRIGGER_NONE                   0x00000000U            /*!< Conversion is automatic once the DAC1_DHRxxxx register 
+#define DAC_TRIGGER_NONE                   0x00000000U            /*!< Conversion is automatic once the DAC1_DHRxxxx register
                                                                        has been loaded, and not by external trigger */
 #define DAC_TRIGGER_T6_TRGO                ((uint32_t)                                                    DAC_CR_TEN1)  /*!< TIM6 TRGO selected as external conversion trigger for DAC channel */
 #define DAC_TRIGGER_T7_TRGO                ((uint32_t)(                 DAC_CR_TSEL1_1                  | DAC_CR_TEN1)) /*!< TIM7 TRGO selected as external conversion trigger for DAC channel */
@@ -98,7 +97,7 @@ extern "C" {
 /* For STM32F10x high-density and XL-density devices: TIM8 */
 #define DAC_TRIGGER_T8_TRGO                ((uint32_t)                                   DAC_CR_TSEL1_0 | DAC_CR_TEN1)  /*!< TIM8 TRGO selected as external conversion trigger for DAC channel */
 #endif /* STM32F101xE || STM32F101xG || STM32F103xE || STM32F103xG */
-   
+
 #if defined (STM32F100xB) || defined (STM32F100xE) || defined (STM32F105xC) || defined (STM32F107xC)
 /* For STM32F10x connectivity line devices and STM32F100x devices: TIM3 */
 #define DAC_TRIGGER_T3_TRGO                ((uint32_t)                                   DAC_CR_TSEL1_0 | DAC_CR_TEN1)  /*!< TIM3 TRGO selected as external conversion trigger for DAC channel */
@@ -120,18 +119,19 @@ extern "C" {
 
 #if defined (STM32F100xE)
 /*!< DAC trigger availability depending on STM32F1 devices:
-     For STM32F100x high-density value line devices, the TIM15 TRGO event can be selected 
+     For STM32F100x high-density value line devices, the TIM15 TRGO event can be selected
      as replacement of TIM5 TRGO if the MISC_REMAP bit in the AFIO_MAPR2 register is set.
      Refer to macro "__HAL_AFIO_REMAP_MISC_ENABLE()/__HAL_AFIO_REMAP_MISC_DISABLE()".
      Otherwise, TIM5 TRGO is used and TIM15 TRGO is not used (default case).
      For more details please refer to the AFIO section. */
 #define DAC_TRIGGER_T15_TRGO    DAC_TRIGGER_T5_TRGO
 #endif /* STM32F100xE */
-   
+
 #endif /* STM32F100xB */
 /**
   * @}
   */
+
 
 /**
   * @}
@@ -225,7 +225,7 @@ HAL_StatusTypeDef HAL_DACEx_NoiseWaveGenerate(DAC_HandleTypeDef *hdac, uint32_t 
 HAL_StatusTypeDef HAL_DACEx_DualStart(DAC_HandleTypeDef *hdac);
 HAL_StatusTypeDef HAL_DACEx_DualStop(DAC_HandleTypeDef *hdac);
 HAL_StatusTypeDef HAL_DACEx_DualSetValue(DAC_HandleTypeDef *hdac, uint32_t Alignment, uint32_t Data1, uint32_t Data2);
-uint32_t HAL_DACEx_DualGetValue(DAC_HandleTypeDef *hdac);
+uint32_t HAL_DACEx_DualGetValue(const DAC_HandleTypeDef *hdac);
 
 void HAL_DACEx_ConvCpltCallbackCh2(DAC_HandleTypeDef *hdac);
 void HAL_DACEx_ConvHalfCpltCallbackCh2(DAC_HandleTypeDef *hdac);
@@ -274,5 +274,3 @@ void DAC_DMAHalfConvCpltCh2(DMA_HandleTypeDef *hdma);
 #endif
 
 #endif /* STM32F1xx_HAL_DAC_EX_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

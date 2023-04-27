@@ -26,19 +26,19 @@
             SD detection interrupt mode by calling the function BSP_SD_ITConfig(). The interrupt 
             is generated as an external interrupt whenever the micro SD card is 
             plugged/unplugged in/from the evaluation board. The SD detection interrupt
-            is handeled by calling the function BSP_SD_DetectIT() which is called in the IRQ
+            is handled by calling the function BSP_SD_DetectIT() which is called in the IRQ
             handler file, the user callback is implemented in the function BSP_SD_DetectCallback().
        (++) The function BSP_SD_GetCardInfo() is used to get the micro SD card information 
             which is stored in the structure "HAL_SD_CardInfoTypedef".
   
   (#) Micro SD card operations
        (++) The micro SD card can be accessed with read/write block(s) operations once 
-            it is reay for access. The access cand be performed whether using the polling 
+            it is ready for access. The access cand be performed whether using the polling 
             mode by calling the functions BSP_SD_ReadBlocks()/BSP_SD_WriteBlocks(), or by DMA 
             transfer using the functions BSP_SD_ReadBlocks_DMA()/BSP_SD_WriteBlocks_DMA()
        (++) The DMA transfer complete is used with interrupt mode. Once the SD transfer
-            is complete, the SD interrupt is handeled using the function BSP_SD_IRQHandler(),
-            the DMA Tx/Rx transfer complete are handeled using the functions
+            is complete, the SD interrupt is handled using the function BSP_SD_IRQHandler(),
+            the DMA Tx/Rx transfer complete are handled using the functions
             BSP_SD_DMA_Tx_IRQHandler()/BSP_SD_DMA_Rx_IRQHandler(). The corresponding user callbacks 
             are implemented by the user at application level. 
        (++) The SD erase block(s) is performed using the function BSP_SD_Erase() with specifying
@@ -49,29 +49,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */ 
@@ -580,4 +563,3 @@ __weak void BSP_SD_ReadCpltCallback(void)
   * @}
   */ 
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

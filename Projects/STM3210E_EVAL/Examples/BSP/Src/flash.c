@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -201,17 +200,17 @@ void FLASH_demo(void)
   /* Check the SPI Flash ID */
   if (FlashID == FLASH_SPI_M25P64_ID)
   {
-    /* Initialization OK as BSP_SERIAL_FLASH_ReadID return the righ value */
+    /* Initialization OK as BSP_SERIAL_FLASH_ReadID return the right value */
     BSP_LCD_DisplayStringAt(20, 100, (uint8_t*)"FLASH Initialization : OK.", LEFT_MODE);
     
     /* Perform a write in the Flash followed by an erase of the written data */
-    /* Write Tx_Buffer data to SPI FLASH memory at begining of Sector12*/
+    /* Write Tx_Buffer data to SPI FLASH memory at beginning of Sector12*/
     BSP_SERIAL_FLASH_WritePage(FLASH_WriteSector12, Tx_Buffer, BufferSize);
     
     /* Erase SPI FLASH Sector12 by giving an Addr inside range of Sector12 Addr */
     BSP_SERIAL_FLASH_EraseSector(FLASH_AddrSector12);
     
-    /* Read Erase data from SPI FLASH memory, shal be 0xFF */
+    /* Read Erase data from SPI FLASH memory, shall be 0xFF */
     BSP_SERIAL_FLASH_ReadData(FLASH_WriteSector12, Rx_Buffer, BufferSize);
 
     /* Check the correctness of erasing operation data */
@@ -357,4 +356,3 @@ static void Flush_Rx_Buffers(uint8_t* pBuffer, uint16_t BufferLength)
 /**
   * @}
   */ 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

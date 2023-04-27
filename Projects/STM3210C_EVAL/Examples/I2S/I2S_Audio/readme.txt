@@ -9,13 +9,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -100,6 +99,5 @@ In order to make the program work, you must do the following :
             loaded audio file at address 0x0800E300 by limiting the application
             end address to 0x0803FFFF. This is already done for the example project 
  - Connect a headphone or a speaker to the audio jack connector (CN7).
- * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
- */
 
+ */

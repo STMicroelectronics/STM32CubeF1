@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -50,7 +49,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
 #define MEMP_NUM_UDP_PCB        6
-/* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
+/* MEMP_NUM_TCP_PCB: the number of simultaneously active TCP
    connections. */
 #define MEMP_NUM_TCP_PCB        10
 /* MEMP_NUM_TCP_PCB_LISTEN: the number of listening TCP
@@ -182,5 +181,3 @@ The STM32F1x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 #define LWIP_SOCKET                     0
 
 #endif /* __LWIPOPTS_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
