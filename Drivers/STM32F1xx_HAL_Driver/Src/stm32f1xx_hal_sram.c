@@ -215,7 +215,10 @@ HAL_StatusTypeDef HAL_SRAM_Init(SRAM_HandleTypeDef *hsram, FSMC_NORSRAM_TimingTy
   __FSMC_NORSRAM_ENABLE(hsram->Instance, hsram->Init.NSBank);
 
   /* Initialize the SRAM controller state */
-  hsram->State = HAL_SRAM_STATE_READY;
+  if (hsram->Init.WriteOperation == FSMC_WRITE_OPERATION_DISABLE)
+    hsram->State = HAL_SRAM_STATE_PROTECTED;
+  else
+    hsram->State = HAL_SRAM_STATE_READY;
 
   return HAL_OK;
 }
