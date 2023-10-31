@@ -1,0 +1,8 @@
+[submodule "Drivers/CMSIS/Device/ST/STM32F1xx"]
+	path = Drivers/CMSIS/Device/ST/STM32F1xx
+	url = https://github.com/STMicroelectronics/cmsis_device_f1.git
+	branch = master
+[submodule "Drivers/STM32F1xx_HAL_Driver"]
+	path = Drivers/STM32F1xx_HAL_Driver
+	url = https://github.com/STMicroelectronics/stm32f1xx_hal_driver.git
+	branch = master
