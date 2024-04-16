@@ -1,7 +1,6 @@
 /*
-*****************************************************************************
+******************************************************************************
 **
-
 **  File        : LinkerScript.ld
 **
 **  Abstract    : Linker script for STM32F103VBIx Device with
@@ -14,17 +13,12 @@
 **
 **  Target      : STMicroelectronics STM32
 **
-**
 **  Distribution: The file is distributed as is, without any warranty
 **                of any kind.
 **
-**  (c)Copyright Ac6.
-**  You may use this file as-is or modify it according to the needs of your
-**  project. Distribution of this file (unmodified or modified) is not
-**  permitted. Ac6 permit registered System Workbench for MCU users the
-**  rights to distribute the assembled, compiled & linked contents of this
-**  file as part of an application binary file, provided that it is built
-**  using the System Workbench for MCU toolchain.
+*****************************************************************************
+**
+**  File provided by SW4STM32
 **
 *****************************************************************************
 */
