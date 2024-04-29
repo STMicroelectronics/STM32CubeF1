@@ -22,3 +22,47 @@
 	path = Drivers/BSP/STM3210E_EVAL
 	url = https://github.com/STMicroelectronics/stm3210e-eval-bsp.git
 	branch = main
+[submodule "Drivers/BSP/Components/Common"]
+	path = Drivers/BSP/Components/Common
+	url = https://github.com/STMicroelectronics/stm32-bsp-common.git
+	branch = main
+[submodule "Drivers/BSP/Components/ak4343"]
+	path = Drivers/BSP/Components/ak4343
+	url = https://github.com/STMicroelectronics/stm32-ak4343.git
+	branch = main
+[submodule "Drivers/BSP/Components/cs43l22"]
+	path = Drivers/BSP/Components/cs43l22
+	url = https://github.com/STMicroelectronics/stm32-cs43l22.git
+	branch = main
+[submodule "Drivers/BSP/Components/hx8347d"]
+	path = Drivers/BSP/Components/hx8347d
+	url = https://github.com/STMicroelectronics/stm32-hx8347d.git
+	branch = main
+[submodule "Drivers/BSP/Components/ili9320"]
+	path = Drivers/BSP/Components/ili9320
+	url = https://github.com/STMicroelectronics/stm32-ili9320.git
+	branch = main
+[submodule "Drivers/BSP/Components/ili9325"]
+	path = Drivers/BSP/Components/ili9325
+	url = https://github.com/STMicroelectronics/stm32-ili9325.git
+	branch = main
+[submodule "Drivers/BSP/Components/lis302dl"]
+	path = Drivers/BSP/Components/lis302dl
+	url = https://github.com/STMicroelectronics/stm32-lis302dl.git
+	branch = main
+[submodule "Drivers/BSP/Components/spfd5408"]
+	path = Drivers/BSP/Components/spfd5408
+	url = https://github.com/STMicroelectronics/stm32-spfd5408.git
+	branch = main
+[submodule "Drivers/BSP/Components/st7735"]
+	path = Drivers/BSP/Components/st7735
+	url = https://github.com/STMicroelectronics/stm32-st7735.git
+	branch = main
+[submodule "Drivers/BSP/Components/stlm75"]
+	path = Drivers/BSP/Components/stlm75
+	url = https://github.com/STMicroelectronics/stm32-stlm75.git
+	branch = main
+[submodule "Drivers/BSP/Components/stmpe811"]
+	path = Drivers/BSP/Components/stmpe811
+	url = https://github.com/STMicroelectronics/stm32-stmpe811.git
+	branch = main
