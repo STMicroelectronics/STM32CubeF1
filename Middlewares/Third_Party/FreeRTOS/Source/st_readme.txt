@@ -25,6 +25,101 @@
 
 =======
 
+### 18-August-2023 ###
+=========================
+  + LICENSE update
+      - Add a LICENSE.md file at the root of the directory
+
+### 31-August-2020 ###
+=========================
+  + Bug fix for G0 compilation error due to IRQn_Type mismatch between G0 and other families
+      - Source/CMSIS_RTOS_V2/cmsis_os2.c
+  + Bug fix when using systick as timebasse for HAL
+      - Source/CMSIS_RTOS_V2/cmsis_os2.c
+
+### 20-July-2020 ###
+=========================
+  + FreeRTOS: Update to FreeRTOS v10.3.1
+  
+  + CMSIS_RTOS_V2: update against the latest CMSIS-FreeRTOS v10.3.0 release
+      - CMSIS_RTOS_V2/cmsis_os2.c
+      - CMSIS_RTOS_V2/freertos_mpool.h
+      - CMSIS_RTOS_V2/freertos_os2.h
+      - CMSIS_RTOS_V2/os_systick.c
+
+  + Add Tickless Idle support for CM23/CM33
+      - GCC/ARM_CM23/non_secure/port.c
+      - GCC/ARM_CM23/non_secure/portmacro.h
+      - GCC/ARM_CM23_NTZ/non_secure/port.c
+      - GCC/ARM_CM23_NTZ/non_secure/portmacro.h
+      - GCC/ARM_CM33/non_secure/port.c
+      - GCC/ARM_CM33/non_secure/portmacro.h
+      - GCC/ARM_CM33_NTZ/non_secure/port.c
+      - GCC/ARM_CM33_NTZ/non_secure/portmacro.h
+      - IAR/ARM_CM23/non_secure/port.c
+      - IAR/ARM_CM23/non_secure/portmacro.h
+      - IAR/ARM_CM23_NTZ/non_secure/port.c
+      - IAR/ARM_CM23_NTZ/non_secure/portmacro.h
+      - IAR/ARM_CM33/non_secure/port.c
+      - IAR/ARM_CM33/non_secure/portmacro.h
+      - IAR/ARM_CM33_NTZ/non_secure/port.c
+      - IAR/ARM_CM33_NTZ/non_secure/portmacro.h
+  
+  +  Fix MPU hardfault bug for Cortex-M4 MPU
+      - GCC\ARM_CM4_MPU\port.c
+      - IAR\ARM_CM4_MPU\port.c
+      - RVDS\ARM_CM4_MPU\port.c
+
+  +  Add support for 16 MPU regions to Cortex-M4 MPU ports
+      - GCC/ARM_CM4_MPU/portmacro.h
+      - IAR/ARM_CM4_MPU/portmacro.h
+      - RVDS/ARM_CM4_MPU/portmacro.h
+
+  + Update ARM_CM7_MPU source files for all compilers
+      - GCC/ARM_CM7_MPU/r0p1/port.c
+      - GCC/ARM_CM7_MPU/r0p1/portmacro.h
+      - IAR/ARM_CM7_MPU/r0p1/port.c
+      - IAR/ARM_CM7_MPU/r0p1/portasm.s
+      - IAR/ARM_CM7_MPU/r0p1/portmacro.h
+      - RVDS/ARM_CM7_MPU/r0p1/port.c
+      - RVDS/ARM_CM7_MPU/r0p1/portmacro.h
+
+### 17-January-2020 ###
+=========================
+  + Fix compile error in the GCC CM7_MPU port caused by a duplicated variable declaration
+      - Source/portable/GCC/ARM_CM7_MPU/r0p1/port.c
+
+### 13-December-2019 ###
+=========================
+  + Remove warnings thrown by EWARM for CM33/CM23 ports
+      - IAR/ARM_CM23/non_secure/portmacro.h
+      - IAR/ARM_CM23_NTZ/non_secure/portmacro.h
+      - IAR/ARM_CM33/non_secure/portmacro.h
+      - IAR/ARM_CM33_NTZ/non_secure/portmacro.h
+
+### 19-July-2019 ###
+=========================
+  + Fix runtime error in the  IAR/CM4_MPU port
+       - IAR/ARM_CM4_MPU/port.c
+
+### 12-July-2019 ###
+=========================
+  + FreeRTOS: Update against the FreeRTOS v10.2.1 release
+    - support for the CM33 and CM23 cores
+
+  + CMSIS_RTOS_V2: update against the latest CMSIS-FreeRTOS v10.2.0 release
+
+  + Add MPU support for the CM7/r0p1:
+       - GCC/ARM_CM7_MPU/r0p1/port.c
+       - GCC/ARM_CM7_MPU/r0p1/portmacro.h
+       - IAR/ARM_CM7_MPU/r0p1/port.c
+       - IAR/ARM_CM7_MPU/r0p1/portasm.s
+       - IAR/ARM_CM7_MPU/r0p1/portmacro.h
+       - RVDS/ARM_CM7_MPU/r0p1/port.c
+       - RVDS/ARM_CM7_MPU/r0p1/portmacro.h
+
+  + cmsis_os.c: Fix compile errors by using the correct TimerCallbackFunction_t type for timer creation
+
 ### 29-Mars-2019 ###
 =========================
   + cmsis_os.c : Fix bug in osPoolAlloc(): memory blocks can't be reused after being free'd

@@ -1,6 +1,7 @@
 /*
- * FreeRTOS Kernel V10.0.1
- * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ * FreeRTOS Kernel V10.3.1
+ * Portion Copyright © 2020 STMicroelectronics International N.V. All rights reserved.
+ * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -25,6 +26,7 @@
  * 1 tab == 4 spaces!
  */
 
+
 #ifndef PORTMACRO_H
 #define PORTMACRO_H
 
@@ -41,6 +43,9 @@ extern "C" {
  * These settings should not be altered.
  *-----------------------------------------------------------
  */
+
+/* IAR includes. */
+#include <intrinsics.h>
 
 /* Type definitions. */
 #define portCHAR		char
@@ -66,31 +71,31 @@ typedef unsigned long UBaseType_t;
 	not need to be guarded with a critical section. */
 	#define portTICK_TYPE_IS_ATOMIC 1
 #endif
-
 /*-----------------------------------------------------------*/
+
 /* MPU specific constants. */
 #define portUSING_MPU_WRAPPERS		1
 #define portPRIVILEGE_BIT			( 0x80000000UL )
 
-#define portMPU_REGION_READ_WRITE				( 0x03UL << 24UL )
-#define portMPU_REGION_PRIVILEGED_READ_ONLY		( 0x05UL << 24UL )
-#define portMPU_REGION_READ_ONLY				( 0x06UL << 24UL )
-#define portMPU_REGION_PRIVILEGED_READ_WRITE	( 0x01UL << 24UL )
-#define portMPU_REGION_CACHEABLE_BUFFERABLE		( 0x07UL << 16UL )
-#define portMPU_REGION_EXECUTE_NEVER			( 0x01UL << 28UL )
+#define portMPU_REGION_READ_WRITE								( 0x03UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_ONLY						( 0x05UL << 24UL )
+#define portMPU_REGION_READ_ONLY								( 0x06UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE					( 0x01UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE_UNPRIV_READ_ONLY	( 0x02UL << 24UL )
+#define portMPU_REGION_CACHEABLE_BUFFERABLE						( 0x03UL << 16UL )
+#define portMPU_REGION_EXECUTE_NEVER							( 0x01UL << 28UL )
 
-#define portUNPRIVILEGED_FLASH_REGION		( 0UL )
-#define portPRIVILEGED_FLASH_REGION			( 1UL )
-#define portPRIVILEGED_RAM_REGION			( 2UL )
-#define portGENERAL_PERIPHERALS_REGION		( 3UL )
-#define portSTACK_REGION					( 4UL )
-#define portFIRST_CONFIGURABLE_REGION	    ( 5UL )
-#define portLAST_CONFIGURABLE_REGION		( 7UL )
-#define portNUM_CONFIGURABLE_REGIONS		( ( portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION ) + 1 )
-#define portTOTAL_NUM_REGIONS				( portNUM_CONFIGURABLE_REGIONS + 1 ) /* Plus one to make space for the stack region. */
+#define portUNPRIVILEGED_FLASH_REGION			( 0UL )
+#define portPRIVILEGED_FLASH_REGION				( 1UL )
+#define portPRIVILEGED_RAM_REGION				( 2UL )
+#define portGENERAL_PERIPHERALS_REGION			( 3UL )
+#define portSTACK_REGION						( 4UL )
+#define portFIRST_CONFIGURABLE_REGION			( 5UL )
+#define portLAST_CONFIGURABLE_REGION			( 7UL )
+#define portNUM_CONFIGURABLE_REGIONS			( ( portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION ) + 1 )
+#define portTOTAL_NUM_REGIONS					( portNUM_CONFIGURABLE_REGIONS + 1 ) /* Plus one to make space for the stack region. */
 
-void vPortSwitchToUserMode( void );
-#define portSWITCH_TO_USER_MODE()	vPortSwitchToUserMode()
+#define portSWITCH_TO_USER_MODE() __asm volatile ( " mrs r0, control \n orr r0, r0, #1 \n msr control, r0 " ::: "r0", "memory" )
 
 typedef struct MPU_REGION_REGISTERS
 {
@@ -104,21 +109,21 @@ typedef struct MPU_SETTINGS
 	xMPU_REGION_REGISTERS xRegion[ portTOTAL_NUM_REGIONS ];
 } xMPU_SETTINGS;
 
-
-
 /* Architecture specifics. */
 #define portSTACK_GROWTH			( -1 )
 #define portTICK_PERIOD_MS			( ( TickType_t ) 1000 / configTICK_RATE_HZ )
 #define portBYTE_ALIGNMENT			8
+/*-----------------------------------------------------------*/
 
 /* SVC numbers for various services. */
 #define portSVC_START_SCHEDULER				0
 #define portSVC_YIELD						1
 #define portSVC_RAISE_PRIVILEGE				2
-/*-----------------------------------------------------------*/
 
 /* Scheduler utilities. */
-#define portYIELD()											\
+
+#define portYIELD()				__asm volatile ( "	SVC	%0	\n" :: "i" (portSVC_YIELD) : "memory" )
+#define portYIELD_WITHIN_API()								\
 {															\
 	/* Set a PendSV to request a context switch. */			\
 	portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;			\
@@ -126,13 +131,10 @@ typedef struct MPU_SETTINGS
 	__ISB();												\
 }
 
-
-
 #define portNVIC_INT_CTRL_REG		( * ( ( volatile uint32_t * ) 0xe000ed04 ) )
 #define portNVIC_PENDSVSET_BIT		( 1UL << 28UL )
-#define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired != pdFALSE ) portYIELD()
+#define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired != pdFALSE ) portYIELD_WITHIN_API()
 #define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
-
 /*-----------------------------------------------------------*/
 
 /* Architecture specific optimisations. */
@@ -140,7 +142,7 @@ typedef struct MPU_SETTINGS
 	#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 #endif
 
-#if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+#if( configUSE_PORT_OPTIMISED_TASK_SELECTION == 1 )
 
 	/* Check the configuration. */
 	#if( configMAX_PRIORITIES > 32 )
@@ -153,7 +155,6 @@ typedef struct MPU_SETTINGS
 
 	/*-----------------------------------------------------------*/
 
-	#include <intrinsics.h>
 	#define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities ) uxTopPriority = ( 31UL - ( ( uint32_t ) __CLZ( ( uxReadyPriorities ) ) ) )
 
 #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
@@ -165,12 +166,11 @@ extern void vPortExitCritical( void );
 
 #define portDISABLE_INTERRUPTS()							\
 {															\
-	 /* Errata work around. */								\
-	__disable_interrupt();									\
+    __disable_interrupt();                                  \
 	__set_BASEPRI( configMAX_SYSCALL_INTERRUPT_PRIORITY );	\
 	__DSB();												\
 	__ISB();												\
-	__enable_interrupt();									\
+    __enable_interrupt();                                   \
 }
 
 #define portENABLE_INTERRUPTS()					__set_BASEPRI( 0 )
@@ -178,14 +178,6 @@ extern void vPortExitCritical( void );
 #define portEXIT_CRITICAL()						vPortExitCritical()
 #define portSET_INTERRUPT_MASK_FROM_ISR()		__get_BASEPRI(); portDISABLE_INTERRUPTS()
 #define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)	__set_BASEPRI( x )
-/*-----------------------------------------------------------*/
-
-/* Tickless idle/low power functionality. */
-#ifndef portSUPPRESS_TICKS_AND_SLEEP
-	extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
-	#define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdleTime )
-#endif
-
 /*-----------------------------------------------------------*/
 
 /* Task function macros as described on the FreeRTOS.org WEB site.  These are
@@ -200,9 +192,66 @@ not necessary for to use this port.  They are defined so the common demo files
 	#define portASSERT_IF_INTERRUPT_PRIORITY_INVALID() 	vPortValidateInterruptPriority()
 #endif
 
-void vSVCHandler( uint32_t *pulParam );
-void vPortResetPrivilege( BaseType_t xRunningPrivileged );
+/* portNOP() is not required by this port. */
+#define portNOP()
 
+#define portINLINE	__inline
+
+#ifndef portFORCE_INLINE
+	#define portFORCE_INLINE inline __attribute__(( always_inline))
+#endif
+
+/*-----------------------------------------------------------*/
+
+portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+{
+uint32_t ulCurrentInterrupt;
+BaseType_t xReturn;
+
+	/* Obtain the number of the currently executing interrupt. */
+	__asm volatile( "mrs %0, ipsr" : "=r"( ulCurrentInterrupt ) :: "memory" );
+
+	if( ulCurrentInterrupt == 0 )
+	{
+		xReturn = pdFALSE;
+	}
+	else
+	{
+		xReturn = pdTRUE;
+	}
+
+	return xReturn;
+}
+
+
+/*-----------------------------------------------------------*/
+
+extern BaseType_t xIsPrivileged( void );
+extern void vResetPrivilege( void );
+
+/**
+ * @brief Checks whether or not the processor is privileged.
+ *
+ * @return 1 if the processor is already privileged, 0 otherwise.
+ */
+#define portIS_PRIVILEGED()			xIsPrivileged()
+
+/**
+ * @brief Raise an SVC request to raise privilege.
+*/
+#define portRAISE_PRIVILEGE()		__asm volatile ( "svc %0 \n" :: "i" ( portSVC_RAISE_PRIVILEGE ) : "memory" );
+
+/**
+ * @brief Lowers the privilege level by setting the bit 0 of the CONTROL
+ * register.
+ */
+#define portRESET_PRIVILEGE()		vResetPrivilege()
+/*-----------------------------------------------------------*/
+
+#ifndef configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY
+	#warning "configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY is not defined. We recommend defining it to 1 in FreeRTOSConfig.h for better security. https://www.freertos.org/FreeRTOS-V10.3.x.html"
+	#define configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY 0
+#endif
 /*-----------------------------------------------------------*/
 
 /* Suppress warnings that are generated by the IAR tools, but cannot be fixed in
@@ -210,6 +259,8 @@ the source code because to do so would cause other compilers to generate
 warnings. */
 #pragma diag_suppress=Pe191
 #pragma diag_suppress=Pa082
+#pragma diag_suppress=Be006
+/*-----------------------------------------------------------*/
 
 #ifdef __cplusplus
 }

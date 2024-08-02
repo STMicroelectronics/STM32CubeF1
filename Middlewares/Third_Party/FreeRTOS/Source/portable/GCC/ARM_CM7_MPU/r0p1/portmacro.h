@@ -1,6 +1,7 @@
 /*
- * FreeRTOS Kernel V10.0.1
- * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ * FreeRTOS Kernel V10.3.1
+ * Portion Copyright © 2020 STMicroelectronics International N.V. All rights reserved.
+ * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,6 +25,7 @@
  *
  * 1 tab == 4 spaces!
  */
+
 
 #ifndef PORTMACRO_H
 #define PORTMACRO_H
@@ -72,12 +74,13 @@ typedef unsigned long UBaseType_t;
 #define portUSING_MPU_WRAPPERS		1
 #define portPRIVILEGE_BIT			( 0x80000000UL )
 
-#define portMPU_REGION_READ_WRITE				( 0x03UL << 24UL )
-#define portMPU_REGION_PRIVILEGED_READ_ONLY		( 0x05UL << 24UL )
-#define portMPU_REGION_READ_ONLY				( 0x06UL << 24UL )
-#define portMPU_REGION_PRIVILEGED_READ_WRITE	( 0x01UL << 24UL )
-#define portMPU_REGION_CACHEABLE_BUFFERABLE		( 0x07UL << 16UL )
-#define portMPU_REGION_EXECUTE_NEVER			( 0x01UL << 28UL )
+#define portMPU_REGION_READ_WRITE								( 0x03UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_ONLY						( 0x05UL << 24UL )
+#define portMPU_REGION_READ_ONLY								( 0x06UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE					( 0x01UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE_UNPRIV_READ_ONLY	( 0x02UL << 24UL )
+#define portMPU_REGION_CACHEABLE_BUFFERABLE						( 0x03UL << 16UL )
+#define portMPU_REGION_EXECUTE_NEVER							( 0x01UL << 28UL )
 
 #define portUNPRIVILEGED_FLASH_REGION		( 0UL )
 #define portPRIVILEGED_FLASH_REGION			( 1UL )
@@ -89,7 +92,7 @@ typedef unsigned long UBaseType_t;
 #define portNUM_CONFIGURABLE_REGIONS		( ( portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION ) + 1 )
 #define portTOTAL_NUM_REGIONS				( portNUM_CONFIGURABLE_REGIONS + 1 ) /* Plus one to make space for the stack region. */
 
-#define portSWITCH_TO_USER_MODE() __asm volatile ( " mrs r0, control \n orr r0, #1 \n msr control, r0 " :::"r0" )
+#define portSWITCH_TO_USER_MODE() __asm volatile ( " mrs r0, control \n orr r0, #1 \n msr control, r0 " ::: "r0", "memory" )
 
 typedef struct MPU_REGION_REGISTERS
 {
@@ -116,7 +119,7 @@ typedef struct MPU_SETTINGS
 
 /* Scheduler utilities. */
 
-#define portYIELD()				__asm volatile ( "	SVC	%0	\n" :: "i" (portSVC_YIELD) )
+#define portYIELD()				__asm volatile ( "	SVC	%0	\n" :: "i" (portSVC_YIELD) : "memory" )
 #define portYIELD_WITHIN_API() 													\
 {																				\
 	/* Set a PendSV to request a context switch. */								\
@@ -124,7 +127,7 @@ typedef struct MPU_SETTINGS
 																				\
 	/* Barriers are normally not required but do ensure the code is completely	\
 	within the specified behaviour for the architecture. */						\
-	__asm volatile( "dsb" );													\
+	__asm volatile( "dsb" ::: "memory" );										\
 	__asm volatile( "isb" );													\
 }
 
@@ -165,7 +168,7 @@ not necessary for to use this port.  They are defined so the common demo files
 	{
 	uint8_t ucReturn;
 
-		__asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) );
+		__asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
 		return ucReturn;
 	}
 
@@ -199,18 +202,28 @@ not necessary for to use this port.  They are defined so the common demo files
 #ifndef portFORCE_INLINE
 	#define portFORCE_INLINE inline __attribute__(( always_inline))
 #endif
+/*-----------------------------------------------------------*/
 
-/* Set the privilege level to user mode if xRunningPrivileged is false. */
-portFORCE_INLINE static void vPortResetPrivilege( BaseType_t xRunningPrivileged )
-{
-	if( xRunningPrivileged != pdTRUE ) 
-	{
-		__asm volatile ( " mrs r0, control 	\n" \
-						 " orr r0, #1 		\n" \
-						 " msr control, r0	\n"	\
-						 :::"r0" );
-	}
-}
+extern BaseType_t xIsPrivileged( void );
+extern void vResetPrivilege( void );
+
+/**
+ * @brief Checks whether or not the processor is privileged.
+ *
+ * @return 1 if the processor is already privileged, 0 otherwise.
+ */
+#define portIS_PRIVILEGED()			xIsPrivileged()
+
+/**
+ * @brief Raise an SVC request to raise privilege.
+*/
+#define portRAISE_PRIVILEGE()		__asm volatile ( "svc %0 \n" :: "i" ( portSVC_RAISE_PRIVILEGE ) : "memory" );
+
+/**
+ * @brief Lowers the privilege level by setting the bit 0 of the CONTROL
+ * register.
+ */
+#define portRESET_PRIVILEGE()		vResetPrivilege()
 /*-----------------------------------------------------------*/
 
 portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
@@ -219,7 +232,7 @@ uint32_t ulCurrentInterrupt;
 BaseType_t xReturn;
 
 	/* Obtain the number of the currently executing interrupt. */
-	__asm volatile( "mrs %0, ipsr" : "=r"( ulCurrentInterrupt ) );
+	__asm volatile( "mrs %0, ipsr" : "=r"( ulCurrentInterrupt ) :: "memory" );
 
 	if( ulCurrentInterrupt == 0 )
 	{
@@ -247,7 +260,7 @@ uint32_t ulNewBASEPRI;
 		"	isb														\n" \
 		"	dsb														\n" \
 		"	cpsie i													\n" \
-		:"=r" (ulNewBASEPRI) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY )
+		:"=r" (ulNewBASEPRI) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY ) : "memory"
 	);
 }
 
@@ -266,7 +279,7 @@ uint32_t ulOriginalBASEPRI, ulNewBASEPRI;
 		"	isb														\n" \
 		"	dsb														\n" \
 		"	cpsie i													\n" \
-		:"=r" (ulOriginalBASEPRI), "=r" (ulNewBASEPRI) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY )
+		:"=r" (ulOriginalBASEPRI), "=r" (ulNewBASEPRI) : "i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY ) : "memory"
 	);
 
 	/* This return will not be reached but is necessary to prevent compiler
@@ -279,12 +292,18 @@ portFORCE_INLINE static void vPortSetBASEPRI( uint32_t ulNewMaskValue )
 {
 	__asm volatile
 	(
-		"	msr basepri, %0	" :: "r" ( ulNewMaskValue )
+		"	msr basepri, %0	" :: "r" ( ulNewMaskValue ) : "memory"
 	);
 }
 /*-----------------------------------------------------------*/
 
+#define portMEMORY_BARRIER() __asm volatile( "" ::: "memory" )
 
+#ifndef configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY
+	#warning "configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY is not defined. We recommend defining it to 1 in FreeRTOSConfig.h for better security. https://www.freertos.org/FreeRTOS-V10.3.x.html"
+	#define configENFORCE_SYSTEM_CALLS_FROM_KERNEL_ONLY 0
+#endif
+/*-----------------------------------------------------------*/
 #ifdef __cplusplus
 }
 #endif
