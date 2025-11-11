@@ -66,3 +66,23 @@
 	path = Drivers/BSP/Components/stmpe811
 	url = https://github.com/STMicroelectronics/stm32-stmpe811.git
 	branch = main
+[submodule "Middlewares/ST/STM32_USB_Device_Library"]
+	path = Middlewares/ST/STM32_USB_Device_Library
+	url = https://github.com/STMicroelectronics/stm32-mw-usb-device.git
+	branch = master
+[submodule "Middlewares/ST/STM32_USB_Host_Library"]
+	path = Middlewares/ST/STM32_USB_Host_Library
+	url = https://github.com/STMicroelectronics/stm32-mw-usb-host.git
+	branch = master
+[submodule "Middlewares/Third_Party/FatFs"]
+	path = Middlewares/Third_Party/FatFs
+	url = https://github.com/STMicroelectronics/stm32-mw-fatfs.git
+	branch = master
+[submodule "Middlewares/Third_Party/FreeRTOS"]
+	path = Middlewares/Third_Party/FreeRTOS
+	url = https://github.com/STMicroelectronics/stm32-mw-freertos.git
+	branch = master
+[submodule "Middlewares/Third_Party/LwIP"]
+	path = Middlewares/Third_Party/LwIP
+	url = https://github.com/STMicroelectronics/stm32-mw-lwip.git
+	branch = master
