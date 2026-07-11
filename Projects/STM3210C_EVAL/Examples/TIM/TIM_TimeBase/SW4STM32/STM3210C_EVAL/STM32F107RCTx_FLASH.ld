@@ -3,8 +3,8 @@
 **
 **  File        : LinkerScript.ld
 **
-**  Abstract    : Linker script for STM32F107RCIx Device with
-**                1024KByte FLASH, 96KByte RAM
+**  Abstract    : Linker script for STM32F107RCTx Device with
+**                256KByte FLASH, 64KByte RAM
 **
 **                Set heap size, stack size and stack location according
 **                to application requirements.
@@ -35,8 +35,8 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 1024K
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 96K
+FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 256K
+RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
 /* Define output sections */
