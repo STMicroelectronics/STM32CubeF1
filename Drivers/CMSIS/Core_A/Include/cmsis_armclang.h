@@ -210,11 +210,20 @@ __STATIC_FORCEINLINE uint32_t __ROR(uint32_t op1, uint32_t op2)
 #define __RBIT          __builtin_arm_rbit
 
 /**
-  \brief   Count leading zeros
+  \brief   Count leading zeros for the unsigned int type.
+  \details Counts the number of leading zeros of a data value.
   \param [in]  value  Value to count the leading zeros
   \return             number of leading zeros in value
  */
-#define __CLZ           (uint8_t)__builtin_clz
+#define __CLZ             (uint8_t)__builtin_clz
+
+/**
+  \brief   Count leading zeros for the unsigned long long type.
+  \details Counts the number of leading zeros of a data value.
+  \param [in]  value  Value to count the leading zeros
+  \return             number of leading zeros in value
+ */
+#define __CLZLL             (uint8_t)__builtin_clzll
 
 /**
   \brief   LDR Exclusive (8 bit)
